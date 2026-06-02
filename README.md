@@ -1,1 +1,1 @@
-# js-golf-apptest
+# js-golf-app
