@@ -305,12 +305,23 @@ html,body{height:100%;background:var(--dark);color:var(--white);font-family:var(
 </style>
 </head>
 <body>
+<!-- SVG Filter: weisser Hintergrund entfernen -->
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute">
+  <defs>
+    <filter id="remove-white" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values="1 0 0 0 0
+                                           0 1 0 0 0
+                                           0 0 1 0 0
+                                          -1 -1 -1 0 3"/>
+    </filter>
+  </defs>
+</svg>
 <div id="app">
 
   <!-- ── HOME ── -->
   <div id="view-home" class="view active">
     <div class="home-logo">
-      <img src="logo-text.png" alt="J&S Golf" id="logo-text-img" style="width:240px;object-fit:contain;margin-bottom:4px;">
+      <img src="logo-text.png" alt="J&S Golf" style="width:240px;object-fit:contain;margin-bottom:4px;filter:url(#remove-white);">
       <div class="home-sub">Matchplay · Saison 2026</div>
     </div>
 
@@ -1397,38 +1408,10 @@ function showToast(msg) {
   toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 2200);
 }
 
-// ── REMOVE WHITE BACKGROUND FROM LOGOS ────────────────────────────────
-function removeWhiteBg(imgEl, threshold) {
-  threshold = threshold || 240;
-  var canvas = document.createElement('canvas');
-  var img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = function() {
-    canvas.width = img.width;
-    canvas.height = img.height;
-    var ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0);
-    var data = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    var d = data.data;
-    for (var i = 0; i < d.length; i += 4) {
-      if (d[i] > threshold && d[i+1] > threshold && d[i+2] > threshold) {
-        d[i+3] = 0;
-      }
-    }
-    ctx.putImageData(data, 0, 0);
-    imgEl.src = canvas.toDataURL('image/png');
-  };
-  img.src = imgEl.src + '?v=' + Date.now();
-}
-
 // ── INIT ───────────────────────────────────────────────────────────────
 loadData();
 renderHome();
 renderSettings();
-window.addEventListener('load', function() {
-  var logoImg = document.getElementById('logo-text-img');
-  if (logoImg) removeWhiteBg(logoImg, 240);
-});
 </script>
 </body>
 </html>
