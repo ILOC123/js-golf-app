@@ -1,0 +1,44 @@
+name: Deploy Dev Branch
+
+on:
+  push:
+    branches: [ dev ]
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout dev
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Deploy dev files to main/dev folder
+        run: |
+          # Speichere dev-Dateien
+          cp golf.html /tmp/golf-dev.html
+          find . -name "*.png" -not -path "./.git/*" | xargs -I{} cp {} /tmp/ 2>/dev/null || true
+
+          # Wechsle zu main
+          git fetch origin main
+          git checkout main
+
+          # Aktualisiere /dev Ordner
+          mkdir -p dev
+          cp /tmp/golf-dev.html dev/golf.html
+          find /tmp -maxdepth 1 -name "*.png" -exec cp {} dev/ \;
+
+          # Commit falls Änderungen vorhanden
+          git add dev/
+          git diff --staged --quiet && echo "Keine Änderungen" || git commit -m "🔧 Dev Deploy: $(date '+%Y-%m-%d %H:%M')"
+          git push origin main
