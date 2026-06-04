@@ -204,6 +204,8 @@ html,body{height:100%;background:var(--dark);color:var(--white);font-family:var(
 .rc-stat{text-align:center;}
 .rc-stat-val{font-size:14px;font-weight:800;font-family:var(--display);letter-spacing:0.5px;}
 .rc-stat-lbl{font-size:9px;color:var(--grey);margin-top:1px;letter-spacing:0.5px;text-transform:uppercase;}
+.rc-extras{padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);display:flex;gap:12px;flex-wrap:wrap;}
+.rc-extras-player{font-size:11px;color:var(--grey-l);}
 
 /* STATS */
 .stat-block{background:var(--dark2);border:1px solid rgba(46,204,113,0.08);border-radius:var(--r);margin:0 12px 10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.25);}
@@ -1166,6 +1168,11 @@ function renderHistory() {
     var t2 = r.holes.reduce(function(s,h){ return s+(h.p2.strokes||0);},0);
     var ext1p = r.holes.filter(function(h){return h.p1.putt3;}).length;
     var ext2p = r.holes.filter(function(h){return h.p2.putt3;}).length;
+    var ext1b = r.holes.filter(function(h){return h.p1.bunker;}).length;
+    var ext2b = r.holes.filter(function(h){return h.p2.bunker;}).length;
+    var ext1w = r.holes.filter(function(h){return h.p1.water;}).length;
+    var ext2w = r.holes.filter(function(h){return h.p2.water;}).length;
+    var hasExtras = ext1p||ext2p||ext1b||ext2b||ext1w||ext2w;
     html += '<div class="round-card" onclick="openRoundDetail(\'' + r.id + '\')">'
       + '<div class="rc-head"><div><div class="rc-date">' + r.date + '</div><div class="rc-course">' + (c?c.name:r.courseKey) + ' · ' + r.tee + '</div></div>'
       + '<span class="rc-badge ' + winner + '">' + badgeText + '</span></div>'
@@ -1173,7 +1180,16 @@ function renderHistory() {
       + '<div class="rc-stat"><div class="rc-stat-val" style="color:var(--j)">' + t1 + '</div><div class="rc-stat-lbl">' + r.p1.name + ' Brutto</div></div>'
       + '<div class="rc-stat"><div class="rc-stat-val" style="color:var(--s)">' + t2 + '</div><div class="rc-stat-lbl">' + r.p2.name + ' Brutto</div></div>'
       + '<div class="rc-stat"><div class="rc-stat-val">' + m.p1 + '-' + m.p2 + '</div><div class="rc-stat-lbl">Löcher</div></div>'
-      + '</div></div>';
+      + '</div>'
+      + (hasExtras ? '<div class="rc-extras">'
+        + '<div class="rc-extras-player"><span style="color:var(--j);font-weight:700">' + r.p1.name + '</span> '
+        + (ext1p ? '⛳ ' + ext1p + ' ' : '') + (ext1b ? '🏖 ' + ext1b + ' ' : '') + (ext1w ? '💧 ' + ext1w : '')
+        + '</div>'
+        + '<div class="rc-extras-player"><span style="color:var(--s);font-weight:700">' + r.p2.name + '</span> '
+        + (ext2p ? '⛳ ' + ext2p + ' ' : '') + (ext2b ? '🏖 ' + ext2b + ' ' : '') + (ext2w ? '💧 ' + ext2w : '')
+        + '</div>'
+        + '</div>' : '')
+      + '</div>';
   });
   el.innerHTML = html;
 }
