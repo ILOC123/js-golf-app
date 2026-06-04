@@ -341,6 +341,9 @@ html,body{height:100%;background:var(--dark);color:var(--white);font-family:var(
       <div class="live-dot" id="sync-dot-home" style="background:var(--grey)"></div>
       <span style="font-size:11px;color:var(--grey)" id="sync-status-home">Verbinde…</span>
     </div>
+
+    <div style="padding:16px 16px 8px;font-size:18px;font-weight:800;">Statistiken</div>
+    <div id="stats-body"></div>
   </div>
 
   <!-- ── ROUND ── -->
@@ -511,12 +514,6 @@ html,body{height:100%;background:var(--dark);color:var(--white);font-family:var(
     <div id="history-list"></div>
   </div>
 
-  <!-- ── STATS ── -->
-  <div id="view-stats" class="view">
-    <div style="padding:16px 16px 8px;font-size:18px;font-weight:800;">Statistiken</div>
-    <div id="stats-body"></div>
-  </div>
-
   <!-- ── SETTINGS ── -->
   <div id="view-settings" class="view">
     <div style="padding:16px 16px 8px;font-size:18px;font-weight:800;">Einstellungen</div>
@@ -568,7 +565,6 @@ html,body{height:100%;background:var(--dark);color:var(--white);font-family:var(
     <button class="nav-btn active" onclick="showView('home')"><span class="nav-icon">🏠</span>Start</button>
     <button class="nav-btn" onclick="showView('round')"><span class="nav-icon">⛳</span>Runde</button>
     <button class="nav-btn" onclick="showView('history')"><span class="nav-icon">📋</span>Verlauf</button>
-    <button class="nav-btn" onclick="showView('stats')"><span class="nav-icon">📊</span>Stats</button>
     <button class="nav-btn" onclick="showView('settings')"><span class="nav-icon">⚙️</span>Settings</button>
   </nav>
 
@@ -712,7 +708,6 @@ function loadAndRender(fromSync) {
   renderHome();
   if(currentView === 'round') renderRoundView();
   if(currentView === 'history') renderHistory();
-  if(currentView === 'stats') renderStats();
   if(currentView === 'settings') renderSettings();
 }
 
@@ -804,7 +799,7 @@ function showView(v) {
   currentView = v;
   document.querySelectorAll('.view').forEach(function(el){ el.classList.remove('active'); });
   document.querySelectorAll('.nav-btn').forEach(function(el){ el.classList.remove('active'); });
-  var views = ['home','round','history','stats','settings'];
+  var views = ['home','round','history','settings'];
   var idx = views.indexOf(v);
   document.getElementById('view-' + v).classList.add('active');
   document.querySelectorAll('.nav-btn')[idx].classList.add('active');
@@ -812,7 +807,6 @@ function showView(v) {
   if(v === 'home') renderHome();
   if(v === 'round') renderRoundView();
   if(v === 'history') renderHistory();
-  if(v === 'stats') renderStats();
   if(v === 'settings') renderSettings();
 }
 
@@ -862,6 +856,8 @@ function renderHome() {
   document.getElementById('home-players-body').innerHTML =
     '<div class="player-season-row"><div class="pdot j"></div><div class="pname">' + p1name + '</div><div class="phcp">HCP ' + DATA.players.p1.hcp + '</div></div>'
     + '<div class="player-season-row"><div class="pdot s"></div><div class="pname">' + p2name + '</div><div class="phcp">HCP ' + DATA.players.p2.hcp + '</div></div>';
+
+  renderStats();
 }
 
 // ── ROUND VIEW ─────────────────────────────────────────────────────────
