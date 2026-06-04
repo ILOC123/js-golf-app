@@ -443,17 +443,17 @@ html,body{height:100%;background:var(--dark);color:var(--white);font-family:var(
           <div>
             <div class="extras-col-name j" id="extras-p1-name">Jessica</div>
             <div class="extra-chips">
-              <button class="xchip putt" id="x-p1-putt" onclick="toggleExtra('p1','putt3')">⛳ 3-Putt</button>
-              <button class="xchip bunker" id="x-p1-bunker" onclick="toggleExtra('p1','bunker')">🏖 Bunker</button>
-              <button class="xchip water" id="x-p1-water" onclick="toggleExtra('p1','water')">💧 Wasser</button>
+              <button class="xchip putt" id="x-p1-putt" onclick="toggleExtra('p1','putt3')">⛳</button>
+              <button class="xchip bunker" id="x-p1-bunker" onclick="toggleExtra('p1','bunker')">🏖</button>
+              <button class="xchip water" id="x-p1-water" onclick="toggleExtra('p1','water')">💧</button>
             </div>
           </div>
           <div>
             <div class="extras-col-name s" id="extras-p2-name">Sarah</div>
             <div class="extra-chips">
-              <button class="xchip putt" id="x-p2-putt" onclick="toggleExtra('p2','putt3')">⛳ 3-Putt</button>
-              <button class="xchip bunker" id="x-p2-bunker" onclick="toggleExtra('p2','bunker')">🏖 Bunker</button>
-              <button class="xchip water" id="x-p2-water" onclick="toggleExtra('p2','water')">💧 Wasser</button>
+              <button class="xchip putt" id="x-p2-putt" onclick="toggleExtra('p2','putt3')">⛳</button>
+              <button class="xchip bunker" id="x-p2-bunker" onclick="toggleExtra('p2','bunker')">🏖</button>
+              <button class="xchip water" id="x-p2-water" onclick="toggleExtra('p2','water')">💧</button>
             </div>
           </div>
         </div>
@@ -1183,14 +1183,14 @@ function renderHistory() {
       + '</div>'
       + (hasExtras ? '<div class="rc-extras">'
         + '<div class="rc-extras-player"><span class="rc-extras-name" style="color:var(--j)">' + r.p1.name + '</span>'
-        + (ext1p ? '<span class="rc-ext-tag rc-ext-figgo">FIGGO!! ' + ext1p + '</span>' : '')
-        + (ext1b ? '<span class="rc-ext-tag rc-ext-bunker">Bunker ' + ext1b + '</span>' : '')
-        + (ext1w ? '<span class="rc-ext-tag rc-ext-water">Wasser ' + ext1w + '</span>' : '')
+        + (ext1p ? '<span class="rc-ext-tag rc-ext-figgo">⛳ ' + ext1p + '</span>' : '')
+        + (ext1b ? '<span class="rc-ext-tag rc-ext-bunker">🏖 ' + ext1b + '</span>' : '')
+        + (ext1w ? '<span class="rc-ext-tag rc-ext-water">💧 ' + ext1w + '</span>' : '')
         + '</div>'
         + '<div class="rc-extras-player"><span class="rc-extras-name" style="color:var(--s)">' + r.p2.name + '</span>'
-        + (ext2p ? '<span class="rc-ext-tag rc-ext-figgo">FIGGO!! ' + ext2p + '</span>' : '')
-        + (ext2b ? '<span class="rc-ext-tag rc-ext-bunker">Bunker ' + ext2b + '</span>' : '')
-        + (ext2w ? '<span class="rc-ext-tag rc-ext-water">Wasser ' + ext2w + '</span>' : '')
+        + (ext2p ? '<span class="rc-ext-tag rc-ext-figgo">⛳ ' + ext2p + '</span>' : '')
+        + (ext2b ? '<span class="rc-ext-tag rc-ext-bunker">🏖 ' + ext2b + '</span>' : '')
+        + (ext2w ? '<span class="rc-ext-tag rc-ext-water">💧 ' + ext2w + '</span>' : '')
         + '</div>'
         + '</div>' : '')
       + '</div>';
