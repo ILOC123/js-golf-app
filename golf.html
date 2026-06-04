@@ -327,6 +327,11 @@ html,body{height:100%;background:var(--dark);color:var(--white);font-family:var(
       <button class="btn-primary" onclick="showView('round')">⛳ Neue Runde starten</button>
     </div>
 
+    <div class="card" id="home-season-card">
+      <div class="card-header"><span class="card-title">Saison Übersicht</span></div>
+      <div id="home-season-body"></div>
+    </div>
+
     <div class="card" id="home-players-card">
       <div class="card-header"><span class="card-title">Spielerinnen</span></div>
       <div id="home-players-body"></div>
@@ -829,8 +834,23 @@ function renderHome() {
     newBtn.style.display = 'block';
   }
 
+  var completed = DATA.rounds;
+  var p1wins = 0, p2wins = 0, halved = 0;
+  completed.forEach(function(r){
+    var w = matchWinnerText(r);
+    if(w === 'p1') p1wins++;
+    else if(w === 'p2') p2wins++;
+    else halved++;
+  });
   var p1name = DATA.players.p1.name;
   var p2name = DATA.players.p2.name;
+  document.getElementById('home-season-body').innerHTML =
+    '<div class="season-grid" style="padding:12px">'
+    + '<div class="season-stat"><div class="season-stat-num j">' + p1wins + '</div><div class="season-stat-label">' + p1name + '</div></div>'
+    + '<div class="season-stat"><div class="season-stat-num s">' + p2wins + '</div><div class="season-stat-label">' + p2name + '</div></div>'
+    + '<div class="season-stat"><div class="season-stat-num" style="color:var(--gold)">' + halved + '</div><div class="season-stat-label">Unentschieden</div></div>'
+    + '<div class="season-stat"><div class="season-stat-num" style="color:var(--grey-l)">' + completed.length + '</div><div class="season-stat-label">Runden</div></div>'
+    + '</div>';
 
   document.getElementById('home-players-body').innerHTML =
     '<div class="player-season-row"><div class="pdot j"></div><div class="pname">' + p1name + '</div><div class="phcp">HCP ' + DATA.players.p1.hcp + '</div></div>'
@@ -1251,18 +1271,7 @@ function renderStats() {
   var p1avg = p1holes > 0 ? (p1total/p1holes).toFixed(1) : '−';
   var p2avg = p2holes > 0 ? (p2total/p2holes).toFixed(1) : '−';
 
-  el.innerHTML = '<div class="stat-block">'
-    + '<div class="stat-block-title">Match-Bilanz</div>'
-    + '<div class="stat-compare">'
-    + '<div class="sc-player"><div class="sc-player-name j">' + p1 + '</div><div class="sc-val j">' + p1w + '</div><div class="sc-label">Gewonnen</div></div>'
-    + '<div class="sc-sep">·</div>'
-    + '<div class="sc-player"><div class="sc-player-name s">' + p2 + '</div><div class="sc-val s">' + p2w + '</div><div class="sc-label">Gewonnen</div></div>'
-    + '</div>'
-    + '<div class="stat-row"><div class="stat-row-icon">🤝</div><div class="stat-row-label">Unentschieden</div><div style="font-size:16px;font-weight:700;font-family:var(--mono);color:var(--gold)">' + halved + '</div></div>'
-    + '<div class="stat-row"><div class="stat-row-icon">📊</div><div class="stat-row-label">Runden total</div><div style="font-size:16px;font-weight:700;font-family:var(--mono)">' + r.length + '</div></div>'
-    + '</div>'
-
-    + '<div class="stat-block" style="margin-top:10px">'
+  el.innerHTML = '<div class="stat-block" style="margin-top:10px">'
     + '<div class="stat-block-title">⛳ Extras</div>'
     + '<div class="stat-row"><div class="stat-row-icon">⛳</div><div class="stat-row-label">3-Putt</div>'
     + '<div class="stat-row-vals"><span class="stat-rv j">' + ep1.putt3 + '</span><span class="stat-rv s">' + ep2.putt3 + '</span></div></div>'
