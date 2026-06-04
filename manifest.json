@@ -1,0 +1,17 @@
+{
+  "name": "J&S Golf",
+  "short_name": "J&S Golf",
+  "description": "Matchplay Golf App für Jessica und Sarah",
+  "start_url": "/js-golf-app/golf.html",
+  "display": "standalone",
+  "background_color": "#060D06",
+  "theme_color": "#060D06",
+  "icons": [
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
