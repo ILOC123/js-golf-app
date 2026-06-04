@@ -1402,5 +1402,10 @@ loadData();
 renderHome();
 renderSettings();
 </script>
+<script>
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('/js-golf-app/sw.js', {scope:'/js-golf-app/'});
+}
+</script>
 </body>
 </html>
