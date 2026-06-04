@@ -204,8 +204,13 @@ html,body{height:100%;background:var(--dark);color:var(--white);font-family:var(
 .rc-stat{text-align:center;}
 .rc-stat-val{font-size:14px;font-weight:800;font-family:var(--display);letter-spacing:0.5px;}
 .rc-stat-lbl{font-size:9px;color:var(--grey);margin-top:1px;letter-spacing:0.5px;text-transform:uppercase;}
-.rc-extras{padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);display:flex;gap:12px;flex-wrap:wrap;}
-.rc-extras-player{font-size:11px;color:var(--grey-l);}
+.rc-extras{padding:10px 14px;border-top:1px solid rgba(255,255,255,0.04);display:flex;flex-direction:column;gap:6px;}
+.rc-extras-player{font-size:11px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.rc-extras-name{font-weight:700;min-width:54px;}
+.rc-ext-tag{padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.4px;}
+.rc-ext-figgo{background:rgba(201,150,10,0.15);color:var(--gold-l);}
+.rc-ext-bunker{background:rgba(230,126,34,0.15);color:#E67E22;}
+.rc-ext-water{background:rgba(52,152,219,0.15);color:#3498DB;}
 
 /* STATS */
 .stat-block{background:var(--dark2);border:1px solid rgba(46,204,113,0.08);border-radius:var(--r);margin:0 12px 10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.25);}
@@ -1182,11 +1187,15 @@ function renderHistory() {
       + '<div class="rc-stat"><div class="rc-stat-val">' + m.p1 + '-' + m.p2 + '</div><div class="rc-stat-lbl">Löcher</div></div>'
       + '</div>'
       + (hasExtras ? '<div class="rc-extras">'
-        + '<div class="rc-extras-player"><span style="color:var(--j);font-weight:700">' + r.p1.name + '</span> '
-        + (ext1p ? 'FIGGO!! ' + ext1p + ' ' : '') + (ext1b ? 'Bunker: ' + ext1b + ' ' : '') + (ext1w ? 'Wasser: ' + ext1w : '')
+        + '<div class="rc-extras-player"><span class="rc-extras-name" style="color:var(--j)">' + r.p1.name + '</span>'
+        + (ext1p ? '<span class="rc-ext-tag rc-ext-figgo">FIGGO!! ' + ext1p + '</span>' : '')
+        + (ext1b ? '<span class="rc-ext-tag rc-ext-bunker">Bunker ' + ext1b + '</span>' : '')
+        + (ext1w ? '<span class="rc-ext-tag rc-ext-water">Wasser ' + ext1w + '</span>' : '')
         + '</div>'
-        + '<div class="rc-extras-player"><span style="color:var(--s);font-weight:700">' + r.p2.name + '</span> '
-        + (ext2p ? 'FIGGO!! ' + ext2p + ' ' : '') + (ext2b ? 'Bunker: ' + ext2b + ' ' : '') + (ext2w ? 'Wasser: ' + ext2w : '')
+        + '<div class="rc-extras-player"><span class="rc-extras-name" style="color:var(--s)">' + r.p2.name + '</span>'
+        + (ext2p ? '<span class="rc-ext-tag rc-ext-figgo">FIGGO!! ' + ext2p + '</span>' : '')
+        + (ext2b ? '<span class="rc-ext-tag rc-ext-bunker">Bunker ' + ext2b + '</span>' : '')
+        + (ext2w ? '<span class="rc-ext-tag rc-ext-water">Wasser ' + ext2w + '</span>' : '')
         + '</div>'
         + '</div>' : '')
       + '</div>';
