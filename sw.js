@@ -1,4 +1,4 @@
-const CACHE = 'jsgolf-v1';
+const CACHE = 'jsgolf-v2';
 const FILES = ['golf.html', 'apple-touch-icon.png', 'manifest.json'];
 
 self.addEventListener('install', e => {
@@ -7,6 +7,11 @@ self.addEventListener('install', e => {
 });
 
 self.addEventListener('activate', e => {
+  e.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+    )
+  );
   self.clients.claim();
 });
 
