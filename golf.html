@@ -77,6 +77,10 @@ html,body{height:100%;background:var(--dark);color:var(--white);font-family:var(
 
 .season-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px 12px;}
 .season-stat{background:var(--dark3);border-radius:var(--r-sm);padding:14px;text-align:center;border:2.5px solid rgba(201,150,10,0.7);box-shadow:0 0 8px rgba(201,150,10,0.1);}
+.season-stat.j{border-color:rgba(46,204,113,0.4);background:rgba(46,204,113,0.04);}
+.season-stat.s{border-color:rgba(175,122,197,0.4);background:rgba(175,122,197,0.04);}
+.season-stat-label.j{color:var(--j);}
+.season-stat-label.s{color:var(--s);}
 .season-stat-num{font-size:34px;font-weight:900;font-family:var(--display);letter-spacing:1px;}
 .season-stat-label{font-size:11px;color:var(--gold-l);margin-top:4px;text-transform:uppercase;letter-spacing:1px;font-weight:700;}
 .season-stat-num.j{color:var(--j);}
@@ -850,8 +854,8 @@ function renderHome() {
   var p2name = DATA.players.p2.name;
   document.getElementById('home-season-body').innerHTML =
     '<div class="season-grid" style="padding:12px">'
-    + '<div class="season-stat"><div class="season-stat-num j">' + p1wins + '</div><div class="season-stat-label">' + p1name + '</div></div>'
-    + '<div class="season-stat"><div class="season-stat-num s">' + p2wins + '</div><div class="season-stat-label">' + p2name + '</div></div>'
+    + '<div class="season-stat j"><div class="season-stat-num j">' + p1wins + '</div><div class="season-stat-label j">' + p1name + '</div></div>'
+    + '<div class="season-stat s"><div class="season-stat-num s">' + p2wins + '</div><div class="season-stat-label s">' + p2name + '</div></div>'
     + '<div class="season-stat"><div class="season-stat-num" style="color:var(--gold-l)">' + halved + '</div><div class="season-stat-label">Unentschieden</div></div>'
     + '<div class="season-stat"><div class="season-stat-num" style="color:var(--gold-l)">' + completed.length + '</div><div class="season-stat-label">Runden</div></div>'
     + '</div>';
