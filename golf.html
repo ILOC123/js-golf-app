@@ -443,17 +443,17 @@ html,body{height:100%;background:var(--dark);color:var(--white);font-family:var(
           <div>
             <div class="extras-col-name j" id="extras-p1-name">Jessica</div>
             <div class="extra-chips">
-              <button class="xchip putt" id="x-p1-putt" onclick="toggleExtra('p1','putt3')">FIGGO!!</button>
-              <button class="xchip bunker" id="x-p1-bunker" onclick="toggleExtra('p1','bunker')">Bunker</button>
-              <button class="xchip water" id="x-p1-water" onclick="toggleExtra('p1','water')">Wasser</button>
+              <button class="xchip putt" id="x-p1-putt" onclick="toggleExtra('p1','putt3')">🤌FIGGO:</button>
+              <button class="xchip bunker" id="x-p1-bunker" onclick="toggleExtra('p1','bunker')">🏖️Bunker:</button>
+              <button class="xchip water" id="x-p1-water" onclick="toggleExtra('p1','water')">💧Wasser:</button>
             </div>
           </div>
           <div>
             <div class="extras-col-name s" id="extras-p2-name">Sarah</div>
             <div class="extra-chips">
-              <button class="xchip putt" id="x-p2-putt" onclick="toggleExtra('p2','putt3')">FIGGO!!</button>
-              <button class="xchip bunker" id="x-p2-bunker" onclick="toggleExtra('p2','bunker')">Bunker</button>
-              <button class="xchip water" id="x-p2-water" onclick="toggleExtra('p2','water')">Wasser</button>
+              <button class="xchip putt" id="x-p2-putt" onclick="toggleExtra('p2','putt3')">🤌FIGGO:</button>
+              <button class="xchip bunker" id="x-p2-bunker" onclick="toggleExtra('p2','bunker')">🏖️Bunker:</button>
+              <button class="xchip water" id="x-p2-water" onclick="toggleExtra('p2','water')">💧Wasser:</button>
             </div>
           </div>
         </div>
@@ -1061,8 +1061,8 @@ function renderHoleList() {
     else if(hr === 'half') hrHtml = '<span class="hl-result h">½</span>';
 
     // Extras icons
-    var ext1 = (h.p1.putt3?' F':'') + (h.p1.bunker?' B':'') + (h.p1.water?' W':'');
-    var ext2 = (h.p2.putt3?' F':'') + (h.p2.bunker?' B':'') + (h.p2.water?' W':'');
+    var ext1 = (h.p1.putt3?' 🤌':'') + (h.p1.bunker?' 🏖️':'') + (h.p1.water?' 💧':'');
+    var ext2 = (h.p2.putt3?' 🤌':'') + (h.p2.bunker?' 🏖️':'') + (h.p2.water?' 💧':'');
 
     var s1 = h.p1.strokes > 0 ? '<span class="hl-score j">' + h.p1.strokes + (ext1?'<small>'+ext1+'</small>':'') + '</span>' : '<span class="hl-score empty">−</span>';
     var s2 = h.p2.strokes > 0 ? '<span class="hl-score s">' + h.p2.strokes + (ext2?'<small>'+ext2+'</small>':'') + '</span>' : '<span class="hl-score empty">−</span>';
@@ -1184,14 +1184,14 @@ function renderHistory() {
       + '</div>'
       + (hasExtras ? '<div class="rc-extras">'
         + '<div class="rc-extras-player"><span class="rc-extras-name" style="color:var(--j)">' + r.p1.name + '</span>'
-        + (ext1p ? '<span class="rc-ext-tag rc-ext-figgo">FIGGO!! ' + ext1p + '</span>' : '')
-        + (ext1b ? '<span class="rc-ext-tag rc-ext-bunker">Bunker ' + ext1b + '</span>' : '')
-        + (ext1w ? '<span class="rc-ext-tag rc-ext-water">Wasser ' + ext1w + '</span>' : '')
+        + (ext1p ? '<span class="rc-ext-tag rc-ext-figgo">🤌FIGGO: ' + ext1p + '</span>' : '')
+        + (ext1b ? '<span class="rc-ext-tag rc-ext-bunker">🏖️Bunker: ' + ext1b + '</span>' : '')
+        + (ext1w ? '<span class="rc-ext-tag rc-ext-water">💧Wasser: ' + ext1w + '</span>' : '')
         + '</div>'
         + '<div class="rc-extras-player"><span class="rc-extras-name" style="color:var(--s)">' + r.p2.name + '</span>'
-        + (ext2p ? '<span class="rc-ext-tag rc-ext-figgo">FIGGO!! ' + ext2p + '</span>' : '')
-        + (ext2b ? '<span class="rc-ext-tag rc-ext-bunker">Bunker ' + ext2b + '</span>' : '')
-        + (ext2w ? '<span class="rc-ext-tag rc-ext-water">Wasser ' + ext2w + '</span>' : '')
+        + (ext2p ? '<span class="rc-ext-tag rc-ext-figgo">🤌FIGGO: ' + ext2p + '</span>' : '')
+        + (ext2b ? '<span class="rc-ext-tag rc-ext-bunker">🏖️Bunker: ' + ext2b + '</span>' : '')
+        + (ext2w ? '<span class="rc-ext-tag rc-ext-water">💧Wasser: ' + ext2w + '</span>' : '')
         + '</div>'
         + '</div>' : '')
       + '</div>';
@@ -1220,8 +1220,8 @@ function openRoundDetail(id) {
     var hd = c ? c.holes[i] : {par:'?', si:'?'};
     var hr = holeResult(h, r);
     var hrHtml = hr==='p1' ? '<span class="hl-result j">J</span>' : hr==='p2' ? '<span class="hl-result s">S</span>' : hr==='half' ? '<span class="hl-result h">½</span>' : '';
-    var ext1 = (h.p1.putt3?' F':'')+(h.p1.bunker?' B':'')+(h.p1.water?' W':'');
-    var ext2 = (h.p2.putt3?' F':'')+(h.p2.bunker?' B':'')+(h.p2.water?' W':'');
+    var ext1 = (h.p1.putt3?' 🤌':'')+(h.p1.bunker?' 🏖️':'')+(h.p1.water?' 💧':'');
+    var ext2 = (h.p2.putt3?' 🤌':'')+(h.p2.bunker?' 🏖️':'')+(h.p2.water?' 💧':'');
     html += '<div class="hole-row"><span class="hl-hole">' + h.num + '</span><span class="hl-par">' + hd.par + '</span>'
       + '<span class="hl-score j' + (!h.p1.strokes?' empty':'') + '">' + (h.p1.strokes||'−') + ext1 + '</span>'
       + '<span class="hl-score s' + (!h.p2.strokes?' empty':'') + '">' + (h.p2.strokes||'−') + ext2 + '</span>'
@@ -1274,11 +1274,11 @@ function renderStats() {
 
   el.innerHTML = '<div class="stat-block" style="margin-top:10px">'
     + '<div class="stat-block-title">Extras</div>'
-    + '<div class="stat-row"><div class="stat-row-label">FIGGO!!</div>'
+    + '<div class="stat-row"><div class="stat-row-label">🤌FIGGO:</div>'
     + '<div class="stat-row-vals"><span class="stat-rv j">' + ep1.putt3 + '</span><span class="stat-rv s">' + ep2.putt3 + '</span></div></div>'
-    + '<div class="stat-row"><div class="stat-row-label">Bunker</div>'
+    + '<div class="stat-row"><div class="stat-row-label">🏖️Bunker:</div>'
     + '<div class="stat-row-vals"><span class="stat-rv j">' + ep1.bunker + '</span><span class="stat-rv s">' + ep2.bunker + '</span></div></div>'
-    + '<div class="stat-row"><div class="stat-row-label">Wasser</div>'
+    + '<div class="stat-row"><div class="stat-row-label">💧Wasser:</div>'
     + '<div class="stat-row-vals"><span class="stat-rv j">' + ep1.water + '</span><span class="stat-rv s">' + ep2.water + '</span></div></div>'
     + '<div style="padding:8px 14px;font-size:10px;color:var(--grey)"><span style="color:var(--j)">' + p1 + '</span> · <span style="color:var(--s)">' + p2 + '</span></div>'
     + '</div>'
