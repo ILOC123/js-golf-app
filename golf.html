@@ -1216,14 +1216,16 @@ function showResult(round) {
   document.getElementById('res-p2-score').textContent = m.p2;
   var br = calcBrutto(round);
   var sf = calcStableford(round);
+  var ch1 = round.p1.courseHcp !== undefined ? round.p1.courseHcp : '−';
+  var ch2 = round.p2.courseHcp !== undefined ? round.p2.courseHcp : '−';
   var statsEl = document.getElementById('res-stats');
   statsEl.innerHTML =
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 16px">'
     + '<div style="background:var(--dark3);border:2.5px solid rgba(201,150,10,0.7);border-radius:var(--r-sm);padding:12px;text-align:center">'
       + '<div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Brutto</div>'
       + '<div style="display:flex;justify-content:space-around">'
-        + '<div><div style="font-size:26px;font-weight:900;font-family:var(--display);color:var(--j)">' + (br.p1||'−') + '</div><div style="font-size:9px;color:var(--j);margin-top:2px">' + p1name + '</div></div>'
-        + '<div><div style="font-size:26px;font-weight:900;font-family:var(--display);color:var(--s)">' + (br.p2||'−') + '</div><div style="font-size:9px;color:var(--s);margin-top:2px">' + p2name + '</div></div>'
+        + '<div><div style="font-size:26px;font-weight:900;font-family:var(--display);color:var(--j)">' + (br.p1||'−') + '</div><div style="font-size:9px;color:var(--j);margin-top:2px">' + p1name + '</div><div style="font-size:9px;color:var(--grey-l);margin-top:1px">HCP ' + ch1 + '</div></div>'
+        + '<div><div style="font-size:26px;font-weight:900;font-family:var(--display);color:var(--s)">' + (br.p2||'−') + '</div><div style="font-size:9px;color:var(--s);margin-top:2px">' + p2name + '</div><div style="font-size:9px;color:var(--grey-l);margin-top:1px">HCP ' + ch2 + '</div></div>'
       + '</div></div>'
     + '<div style="background:var(--dark3);border:2.5px solid rgba(201,150,10,0.7);border-radius:var(--r-sm);padding:12px;text-align:center">'
       + '<div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Stableford</div>'
@@ -1306,10 +1308,12 @@ function openRoundDetail(id) {
   var c = getCourse(r.courseKey);
   var m = calcMatch(r);
   var winner = m.lead > 0 ? r.p1.name : m.lead < 0 ? r.p2.name : null;
+  var chcp1 = r.p1.courseHcp !== undefined ? r.p1.courseHcp : '−';
+  var chcp2 = r.p2.courseHcp !== undefined ? r.p2.courseHcp : '−';
   var html = '<div class="rd-header">'
-    + '<div class="rds-player"><div class="rds-name j">' + r.p1.name + '</div><div class="rds-score j">' + m.p1 + '</div></div>'
+    + '<div class="rds-player"><div class="rds-name j">' + r.p1.name + '</div><div class="rds-score j">' + m.p1 + '</div><div style="font-size:10px;color:var(--grey-l);margin-top:4px">Course HCP ' + chcp1 + '</div></div>'
     + '<div class="rds-vs">vs</div>'
-    + '<div class="rds-player"><div class="rds-name s">' + r.p2.name + '</div><div class="rds-score s">' + m.p2 + '</div></div>'
+    + '<div class="rds-player"><div class="rds-name s">' + r.p2.name + '</div><div class="rds-score s">' + m.p2 + '</div><div style="font-size:10px;color:var(--grey-l);margin-top:4px">Course HCP ' + chcp2 + '</div></div>'
     + '</div>';
   html += '<div style="font-size:15px;font-weight:700;color:var(--gold-l);margin-bottom:12px;text-align:center;letter-spacing:0.5px;">'
     + (winner ? '🏆 ' + winner + ' gewinnt · ' : '🤝 Unentschieden · ') + matchStatusText(m) + '</div>';
