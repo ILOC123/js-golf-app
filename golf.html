@@ -177,7 +177,7 @@ html,body{height:100%;background:var(--dark);color:var(--white);font-family:var(
 
 /* HOLE SUMMARY TABLE */
 .hole-tbl{width:100%;}
-.hole-row{display:grid;grid-template-columns:28px 26px 1fr 1fr 36px;align-items:center;min-height:44px;padding:2px 8px;border-bottom:1.5px solid rgba(201,150,10,0.2);gap:4px;cursor:pointer;}
+.hole-row{display:grid;grid-template-columns:28px 26px 1fr 1fr 36px;align-items:center;min-height:48px;padding:4px 8px;border-bottom:1.5px solid rgba(201,150,10,0.2);gap:4px;cursor:pointer;}
 .hole-row:active{background:rgba(255,255,255,0.03);}
 .hole-row.hdr{background:var(--dark3);min-height:26px;position:sticky;top:0;cursor:default;border-bottom:1.5px solid rgba(201,150,10,0.4);}
 .hole-row.hdr span{font-size:8px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--gold);text-align:center;}
@@ -186,6 +186,12 @@ html,body{height:100%;background:var(--dark);color:var(--white);font-family:var(
 .hl-hole{font-family:var(--mono);font-size:13px;font-weight:700;text-align:center;}
 .hl-par{font-family:var(--mono);font-size:12px;color:var(--grey);text-align:center;}
 .hl-score{font-family:var(--display);font-size:18px;font-weight:900;text-align:center;letter-spacing:1px;}
+.hl-cell{display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.hl-ext-row{display:flex;gap:2px;justify-content:center;margin-top:2px;}
+.hl-ext-tag{font-size:10px;padding:1px 3px;border-radius:3px;}
+.hl-ext-tag.figgo{background:rgba(201,150,10,0.2);}
+.hl-ext-tag.bunker{background:rgba(230,126,34,0.2);}
+.hl-ext-tag.water{background:rgba(52,152,219,0.2);}
 .hl-score.j{color:var(--j);}
 .hl-score.s{color:var(--s);}
 .hl-score.empty{color:rgba(255,255,255,0.12);font-size:14px;font-family:var(--mono);}
@@ -1246,12 +1252,12 @@ function openRoundDetail(id) {
     var hd = c ? c.holes[i] : {par:'?', si:'?'};
     var hr = holeResult(h, r);
     var hrHtml = hr==='p1' ? '<span class="hl-result j">J</span>' : hr==='p2' ? '<span class="hl-result s">S</span>' : hr==='half' ? '<span class="hl-result h">½</span>' : '';
-    var ext1 = (h.p1.putt3?' 🤌':'')+(h.p1.bunker?' 🏖️':'')+(h.p1.water?' 💧':'');
-    var ext2 = (h.p2.putt3?' 🤌':'')+(h.p2.bunker?' 🏖️':'')+(h.p2.water?' 💧':'');
+    var ext1tags = (h.p1.putt3?'<span class="hl-ext-tag figgo">🤌</span>':'')+(h.p1.bunker?'<span class="hl-ext-tag bunker">🏖️</span>':'')+(h.p1.water?'<span class="hl-ext-tag water">💧</span>':'');
+    var ext2tags = (h.p2.putt3?'<span class="hl-ext-tag figgo">🤌</span>':'')+(h.p2.bunker?'<span class="hl-ext-tag bunker">🏖️</span>':'')+(h.p2.water?'<span class="hl-ext-tag water">💧</span>':'');
+    var s1cell = '<div class="hl-cell"><span class="hl-score j' + (!h.p1.strokes?' empty':'') + '">' + (h.p1.strokes||'−') + '</span>' + (ext1tags?'<div class="hl-ext-row">'+ext1tags+'</div>':'') + '</div>';
+    var s2cell = '<div class="hl-cell"><span class="hl-score s' + (!h.p2.strokes?' empty':'') + '">' + (h.p2.strokes||'−') + '</span>' + (ext2tags?'<div class="hl-ext-row">'+ext2tags+'</div>':'') + '</div>';
     html += '<div class="hole-row"><span class="hl-hole">' + h.num + '</span><span class="hl-par">' + hd.par + '</span>'
-      + '<span class="hl-score j' + (!h.p1.strokes?' empty':'') + '">' + (h.p1.strokes||'−') + ext1 + '</span>'
-      + '<span class="hl-score s' + (!h.p2.strokes?' empty':'') + '">' + (h.p2.strokes||'−') + ext2 + '</span>'
-      + hrHtml + '</div>';
+      + s1cell + s2cell + hrHtml + '</div>';
   });
   html += '</div>';
   html += '<div style="margin-top:14px"><button class="btn-danger" onclick="deleteRound(\'' + r.id + '\')">Runde löschen</button></div>';
