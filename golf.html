@@ -1254,8 +1254,11 @@ function openRoundDetail(id) {
     var hrHtml = hr==='p1' ? '<span class="hl-result j">J</span>' : hr==='p2' ? '<span class="hl-result s">S</span>' : hr==='half' ? '<span class="hl-result h">½</span>' : '';
     var ext1tags = (h.p1.putt3?'<span class="hl-ext-tag figgo">🤌</span>':'')+(h.p1.bunker?'<span class="hl-ext-tag bunker">🏖️</span>':'')+(h.p1.water?'<span class="hl-ext-tag water">💧</span>':'');
     var ext2tags = (h.p2.putt3?'<span class="hl-ext-tag figgo">🤌</span>':'')+(h.p2.bunker?'<span class="hl-ext-tag bunker">🏖️</span>':'')+(h.p2.water?'<span class="hl-ext-tag water">💧</span>':'');
-    var s1cell = '<div class="hl-cell"><span class="hl-score j' + (!h.p1.strokes?' empty':'') + '">' + (h.p1.strokes||'−') + '</span>' + (ext1tags?'<div class="hl-ext-row">'+ext1tags+'</div>':'') + '</div>';
-    var s2cell = '<div class="hl-cell"><span class="hl-score s' + (!h.p2.strokes?' empty':'') + '">' + (h.p2.strokes||'−') + '</span>' + (ext2tags?'<div class="hl-ext-row">'+ext2tags+'</div>':'') + '</div>';
+    var sv = getHoleStrokes(r.p1.courseHcp||0, r.p2.courseHcp||0, hd.si);
+    var pill1 = sv[0] > 0 ? '<span class="stroke-pill">+' + sv[0] + '</span>' : '';
+    var pill2 = sv[1] > 0 ? '<span class="stroke-pill">+' + sv[1] + '</span>' : '';
+    var s1cell = '<div class="hl-cell">' + pill1 + '<span class="hl-score j' + (!h.p1.strokes?' empty':'') + '">' + (h.p1.strokes||'−') + '</span>' + (ext1tags?'<div class="hl-ext-row">'+ext1tags+'</div>':'') + '</div>';
+    var s2cell = '<div class="hl-cell">' + pill2 + '<span class="hl-score s' + (!h.p2.strokes?' empty':'') + '">' + (h.p2.strokes||'−') + '</span>' + (ext2tags?'<div class="hl-ext-row">'+ext2tags+'</div>':'') + '</div>';
     html += '<div class="hole-row"><span class="hl-hole">' + h.num + '</span><span class="hl-par">' + hd.par + '</span>'
       + s1cell + s2cell + hrHtml + '</div>';
   });
