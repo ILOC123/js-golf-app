@@ -1138,7 +1138,7 @@ function showResult(round) {
   document.getElementById('round-setup').style.display = 'none';
   document.getElementById('round-scoring').style.display = 'none';
   document.getElementById('round-result').style.display = 'block';
-  var m = round.matchResult || calcMatch(round);
+  var m = calcMatch(round);
   var p1name = round.p1.name, p2name = round.p2.name;
   var winner = m.lead > 0 ? p1name : m.lead < 0 ? p2name : null;
   document.getElementById('res-trophy').textContent = winner ? '🏆' : '🤝';
@@ -1175,7 +1175,7 @@ function renderHistory() {
   }
   DATA.rounds.forEach(function(r){
     var c = getCourse(r.courseKey);
-    var m = r.matchResult || calcMatch(r);
+    var m = calcMatch(r);
     var winner = m.lead > 0 ? 'j' : m.lead < 0 ? 's' : 'half';
     var badgeText = m.lead === 0 ? 'Unentschieden' : (m.lead > 0 ? r.p1.name : r.p2.name) + ' ' + matchStatusText(m);
     var t1 = r.holes.reduce(function(s,h){ return s+(h.p1.strokes||0);},0);
@@ -1216,7 +1216,7 @@ function openRoundDetail(id) {
   var r = DATA.rounds.find(function(x){ return x.id === id; });
   if(!r) return;
   var c = getCourse(r.courseKey);
-  var m = r.matchResult || calcMatch(r);
+  var m = calcMatch(r);
   var winner = m.lead > 0 ? r.p1.name : m.lead < 0 ? r.p2.name : null;
   var html = '<div class="rd-header">'
     + '<div class="rds-player"><div class="rds-name j">' + r.p1.name + '</div><div class="rds-score j">' + m.p1 + '</div></div>'
