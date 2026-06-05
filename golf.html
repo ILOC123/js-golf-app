@@ -1060,8 +1060,8 @@ function renderHoleList() {
     else if(hr === 'half') hrHtml = '<span class="hl-result h">½</span>';
 
     // Extras icons
-    var ext1 = (h.p1.putt3?'⛳':'') + (h.p1.bunker?'🏖':'') + (h.p1.water?'💧':'');
-    var ext2 = (h.p2.putt3?'⛳':'') + (h.p2.bunker?'🏖':'') + (h.p2.water?'💧':'');
+    var ext1 = (h.p1.putt3?' F':'') + (h.p1.bunker?' B':'') + (h.p1.water?' W':'');
+    var ext2 = (h.p2.putt3?' F':'') + (h.p2.bunker?' B':'') + (h.p2.water?' W':'');
 
     var s1 = h.p1.strokes > 0 ? '<span class="hl-score j">' + h.p1.strokes + (ext1?'<small>'+ext1+'</small>':'') + '</span>' : '<span class="hl-score empty">−</span>';
     var s2 = h.p2.strokes > 0 ? '<span class="hl-score s">' + h.p2.strokes + (ext2?'<small>'+ext2+'</small>':'') + '</span>' : '<span class="hl-score empty">−</span>';
@@ -1219,8 +1219,8 @@ function openRoundDetail(id) {
     var hd = c ? c.holes[i] : {par:'?', si:'?'};
     var hr = holeResult(h, r);
     var hrHtml = hr==='p1' ? '<span class="hl-result j">J</span>' : hr==='p2' ? '<span class="hl-result s">S</span>' : hr==='half' ? '<span class="hl-result h">½</span>' : '';
-    var ext1 = (h.p1.putt3?'⛳':'')+(h.p1.bunker?'🏖':'')+(h.p1.water?'💧':'');
-    var ext2 = (h.p2.putt3?'⛳':'')+(h.p2.bunker?'🏖':'')+(h.p2.water?'💧':'');
+    var ext1 = (h.p1.putt3?' F':'')+(h.p1.bunker?' B':'')+(h.p1.water?' W':'');
+    var ext2 = (h.p2.putt3?' F':'')+(h.p2.bunker?' B':'')+(h.p2.water?' W':'');
     html += '<div class="hole-row"><span class="hl-hole">' + h.num + '</span><span class="hl-par">' + hd.par + '</span>'
       + '<span class="hl-score j' + (!h.p1.strokes?' empty':'') + '">' + (h.p1.strokes||'−') + ext1 + '</span>'
       + '<span class="hl-score s' + (!h.p2.strokes?' empty':'') + '">' + (h.p2.strokes||'−') + ext2 + '</span>'
@@ -1272,12 +1272,12 @@ function renderStats() {
   var p2avg = p2holes > 0 ? (p2total/p2holes).toFixed(1) : '−';
 
   el.innerHTML = '<div class="stat-block" style="margin-top:10px">'
-    + '<div class="stat-block-title">⛳ Extras</div>'
-    + '<div class="stat-row"><div class="stat-row-icon">⛳</div><div class="stat-row-label">3-Putt</div>'
+    + '<div class="stat-block-title">Extras</div>'
+    + '<div class="stat-row"><div class="stat-row-icon" style="font-size:11px;font-weight:800;color:var(--gold-l)">F!!</div><div class="stat-row-label">FIGGO!!</div>'
     + '<div class="stat-row-vals"><span class="stat-rv j">' + ep1.putt3 + '</span><span class="stat-rv s">' + ep2.putt3 + '</span></div></div>'
-    + '<div class="stat-row"><div class="stat-row-icon">🏖</div><div class="stat-row-label">Bunker</div>'
+    + '<div class="stat-row"><div class="stat-row-icon" style="font-size:11px;font-weight:800;color:#E67E22">B</div><div class="stat-row-label">Bunker</div>'
     + '<div class="stat-row-vals"><span class="stat-rv j">' + ep1.bunker + '</span><span class="stat-rv s">' + ep2.bunker + '</span></div></div>'
-    + '<div class="stat-row"><div class="stat-row-icon">💧</div><div class="stat-row-label">Wasser</div>'
+    + '<div class="stat-row"><div class="stat-row-icon" style="font-size:11px;font-weight:800;color:#3498DB">W</div><div class="stat-row-label">Wasser</div>'
     + '<div class="stat-row-vals"><span class="stat-rv j">' + ep1.water + '</span><span class="stat-rv s">' + ep2.water + '</span></div></div>'
     + '<div style="padding:8px 14px;font-size:10px;color:var(--grey)"><span style="color:var(--j)">' + p1 + '</span> · <span style="color:var(--s)">' + p2 + '</span></div>'
     + '</div>'
