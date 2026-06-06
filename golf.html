@@ -773,6 +773,10 @@ function calcCourseHcp(hcp, cr, sr, par) {
   return Math.round(hcp * sr / 113 + (cr - par));
 }
 
+function calcPlayingHcp(courseHcp) {
+  return Math.round(courseHcp * 0.75);
+}
+
 function getHoleStrokes(p1Chcp, p2Chcp, si) {
   // returns [p1strokes, p2strokes] for this hole
   var diff = p1Chcp - p2Chcp;
@@ -793,7 +797,9 @@ function holeResult(hole, round) {
   var c = getCourse(round.courseKey);
   if(!c) return null;
   var hd = c.holes[hole.num - 1];
-  var strokes = getHoleStrokes(round.p1.courseHcp, round.p2.courseHcp, hd.si);
+  var ph1 = calcPlayingHcp(round.p1.courseHcp||0);
+  var ph2 = calcPlayingHcp(round.p2.courseHcp||0);
+  var strokes = getHoleStrokes(ph1, ph2, hd.si);
   var n1 = hole.p1.strokes - strokes[0];
   var n2 = hole.p2.strokes - strokes[1];
   if(n1 < n2) return 'p1';
@@ -966,8 +972,8 @@ function updateCourseHcps() {
   var h2 = parseFloat(document.getElementById('setup-p2-hcp').value) || 0;
   var ch1 = calcCourseHcp(h1, td.cr, td.sr, td.par);
   var ch2 = calcCourseHcp(h2, td.cr, td.sr, td.par);
-  document.getElementById('setup-p1-chcp').textContent = 'Course HCP: ' + ch1;
-  document.getElementById('setup-p2-chcp').textContent = 'Course HCP: ' + ch2;
+  document.getElementById('setup-p1-chcp').textContent = 'Course HCP: ' + ch1 + '  →  Spiel HCP: ' + calcPlayingHcp(ch1);
+  document.getElementById('setup-p2-chcp').textContent = 'Course HCP: ' + ch2 + '  →  Spiel HCP: ' + calcPlayingHcp(ch2);
 }
 
 function startRound() {
@@ -991,8 +997,8 @@ function startRound() {
     date: date,
     courseKey: ck,
     tee: tee,
-    p1: {name:DATA.players.p1.name, hcp:h1, courseHcp:ch1},
-    p2: {name:DATA.players.p2.name, hcp:h2, courseHcp:ch2},
+    p1: {name:DATA.players.p1.name, hcp:h1, courseHcp:ch1, playingHcp:calcPlayingHcp(ch1)},
+    p2: {name:DATA.players.p2.name, hcp:h2, courseHcp:ch2, playingHcp:calcPlayingHcp(ch2)},
     holes: holes,
     status: 'active'
   };
@@ -1036,7 +1042,7 @@ function renderScoring() {
   document.getElementById('btn-next-hole').disabled = currentHole >= 18;
 
   // Stroke pills (HCP strokes)
-  var strokes = getHoleStrokes(ar.p1.courseHcp, ar.p2.courseHcp, hd.si);
+  var strokes = getHoleStrokes(calcPlayingHcp(ar.p1.courseHcp||0), calcPlayingHcp(ar.p2.courseHcp||0), hd.si);
   var sp1 = document.getElementById('sc-p1-stroke-pill');
   var sp2 = document.getElementById('sc-p2-stroke-pill');
   if(strokes[0] > 0) { sp1.style.display='inline'; sp1.textContent='+'+strokes[0]+' Vorgabe-Schlag'+(strokes[0]>1?'e':''); }
@@ -1182,16 +1188,22 @@ function finishRound() {
   showResult(ar);
 }
 
+function holeStrokeAlloc(ch, si) {
+  var s = 0;
+  if(si <= ch) s = 1;
+  if(ch > 18 && si <= (ch - 18)) s = 2;
+  return s;
+}
+
 function calcStableford(round) {
   var c = getCourse(round.courseKey);
   if(!c) return {p1:0, p2:0};
+  var ch1 = round.p1.courseHcp||0, ch2 = round.p2.courseHcp||0;
   var p1pts = 0, p2pts = 0;
   round.holes.forEach(function(h) {
-    if(!h.p1.strokes && !h.p2.strokes) return;
     var hd = c.holes[h.num - 1];
-    var sv = getHoleStrokes(round.p1.courseHcp||0, round.p2.courseHcp||0, hd.si);
-    if(h.p1.strokes) { var net1 = h.p1.strokes - sv[0]; p1pts += Math.max(0, 2 - (net1 - hd.par)); }
-    if(h.p2.strokes) { var net2 = h.p2.strokes - sv[1]; p2pts += Math.max(0, 2 - (net2 - hd.par)); }
+    if(h.p1.strokes) { var net1 = h.p1.strokes - holeStrokeAlloc(ch1, hd.si); p1pts += Math.max(0, 2 - (net1 - hd.par)); }
+    if(h.p2.strokes) { var net2 = h.p2.strokes - holeStrokeAlloc(ch2, hd.si); p2pts += Math.max(0, 2 - (net2 - hd.par)); }
   });
   return {p1:p1pts, p2:p2pts};
 }
@@ -1312,10 +1324,12 @@ function openRoundDetail(id) {
   var winner = m.lead > 0 ? r.p1.name : m.lead < 0 ? r.p2.name : null;
   var chcp1 = r.p1.courseHcp !== undefined ? r.p1.courseHcp : '−';
   var chcp2 = r.p2.courseHcp !== undefined ? r.p2.courseHcp : '−';
+  var phcp1 = r.p1.courseHcp !== undefined ? calcPlayingHcp(r.p1.courseHcp) : '−';
+  var phcp2 = r.p2.courseHcp !== undefined ? calcPlayingHcp(r.p2.courseHcp) : '−';
   var html = '<div class="rd-header">'
-    + '<div class="rds-player"><div class="rds-name j">' + r.p1.name + '</div><div class="rds-score j">' + m.p1 + '</div><div style="font-size:10px;color:var(--grey-l);margin-top:4px">Course HCP ' + chcp1 + '</div></div>'
+    + '<div class="rds-player"><div class="rds-name j">' + r.p1.name + '</div><div class="rds-score j">' + m.p1 + '</div><div style="font-size:10px;color:var(--grey-l);margin-top:4px">HCP ' + chcp1 + ' · Spiel ' + phcp1 + '</div></div>'
     + '<div class="rds-vs">vs</div>'
-    + '<div class="rds-player"><div class="rds-name s">' + r.p2.name + '</div><div class="rds-score s">' + m.p2 + '</div><div style="font-size:10px;color:var(--grey-l);margin-top:4px">Course HCP ' + chcp2 + '</div></div>'
+    + '<div class="rds-player"><div class="rds-name s">' + r.p2.name + '</div><div class="rds-score s">' + m.p2 + '</div><div style="font-size:10px;color:var(--grey-l);margin-top:4px">HCP ' + chcp2 + ' · Spiel ' + phcp2 + '</div></div>'
     + '</div>';
   html += '<div style="font-size:15px;font-weight:700;color:var(--gold-l);margin-bottom:12px;text-align:center;letter-spacing:0.5px;">'
     + (winner ? '🏆 ' + winner + ' gewinnt · ' : '🤝 Unentschieden · ') + matchStatusText(m) + '</div>';
@@ -1366,7 +1380,7 @@ function openRoundDetail(id) {
     var hrHtml = hr==='p1' ? '<span class="hl-result j">J</span>' : hr==='p2' ? '<span class="hl-result s">S</span>' : hr==='half' ? '<span class="hl-result h">½</span>' : '';
     var ext1tags = (h.p1.putt3?'<span class="hl-ext-tag figgo">🤌</span>':'')+(h.p1.putt4?'<span class="hl-ext-tag figgo">🤌🤌</span>':'')+((+h.p1.bunker>0)?'<span class="hl-ext-tag bunker">🏖️'+(+h.p1.bunker>1?+h.p1.bunker:'')+'</span>':'')+((+h.p1.water>0)?'<span class="hl-ext-tag water">💧'+(+h.p1.water>1?+h.p1.water:'')+'</span>':'');
     var ext2tags = (h.p2.putt3?'<span class="hl-ext-tag figgo">🤌</span>':'')+(h.p2.putt4?'<span class="hl-ext-tag figgo">🤌🤌</span>':'')+((+h.p2.bunker>0)?'<span class="hl-ext-tag bunker">🏖️'+(+h.p2.bunker>1?+h.p2.bunker:'')+'</span>':'')+((+h.p2.water>0)?'<span class="hl-ext-tag water">💧'+(+h.p2.water>1?+h.p2.water:'')+'</span>':'');
-    var sv = getHoleStrokes(r.p1.courseHcp||0, r.p2.courseHcp||0, hd.si);
+    var sv = getHoleStrokes(calcPlayingHcp(r.p1.courseHcp||0), calcPlayingHcp(r.p2.courseHcp||0), hd.si);
     var pill1 = sv[0] > 0 ? '<span class="stroke-pill">+' + sv[0] + '</span>' : '';
     var pill2 = sv[1] > 0 ? '<span class="stroke-pill">+' + sv[1] + '</span>' : '';
     var s1cell = '<div class="hl-cell">' + pill1 + '<span class="hl-score j' + (!h.p1.strokes?' empty':'') + '">' + (h.p1.strokes||'−') + '</span>' + (ext1tags?'<div class="hl-ext-row">'+ext1tags+'</div>':'') + '</div>';
