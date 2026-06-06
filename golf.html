@@ -427,13 +427,14 @@ html,body{height:100%;background:var(--dark);color:var(--white);font-family:var(
         </div>
         <div class="form-group" id="guest-mode-section" style="display:none">
           <label class="form-label">Spielform</label>
-          <select class="form-input form-select" id="guest-mode-select" onchange="updateCourseHcps()">
+          <select class="form-input form-select" id="guest-mode-select" onchange="updateCourseHcps();updateModeDesc()">
             <option value="matchplay">Matchplay</option>
             <option value="stableford">Stableford</option>
             <option value="stroke">Zählwettspiel</option>
             <option value="skins">Skins</option>
             <option value="nassau">Nassau</option>
           </select>
+          <div id="guest-mode-desc" style="margin-top:8px;padding:10px 12px;background:rgba(201,150,10,0.07);border:1px solid rgba(201,150,10,0.25);border-radius:var(--r-sm);font-size:12px;color:var(--grey-l);line-height:1.6;"></div>
         </div>
         <div class="form-group" id="guest-hcp-section" style="display:none">
           <label class="form-label">Spieler &amp; Handicap</label>
@@ -768,7 +769,7 @@ html,body{height:100%;background:var(--dark);color:var(--white);font-family:var(
 
 <script>
 // ── CONSTANTS ──────────────────────────────────────────────────────────
-var VERSION = '2026.06.06c';
+var VERSION = '2026.06.06d';
 var COURSES = {
   davos: {
     name: 'Golfclub Davos',
@@ -839,6 +840,15 @@ var GAME_MODES = {
   nassau:{label:'Nassau',min:2,max:2},
   train:{label:'Train',min:3,max:4},
   vierball:{label:'Vierball-Bestball',min:4,max:4}
+};
+var GAME_MODE_DESC = {
+  matchplay: '2 Spieler spielen Loch für Loch gegeneinander. Wer das Loch mit weniger Netto-Schlägen gewinnt, führt. Sieger ist wer die meisten Löcher gewonnen hat.',
+  stableford: 'Punkte pro Loch nach Netto-Score: Eagle = 4 Pts, Birdie = 3, Par = 2, Bogey = 1, Doppelbogey+ = 0. Wer am Ende die meisten Punkte hat, gewinnt.',
+  stroke: 'Alle Schläge werden gezählt. Gewonnen hat wer am Ende die wenigsten Netto-Schläge (Brutto minus Vorgabe-Schläge) hat.',
+  skins: 'Jedes Loch ist ein eigener Einsatz (Skin). Wer das Loch alleine mit dem besten Netto-Score gewinnt, erhält den Skin. Bei Gleichstand wandert der Skin zum nächsten Loch.',
+  nassau: '3 Wetten in einer: Vordere 9, Hintere 9 und Gesamt. Wer die meisten Löcher im jeweiligen Abschnitt (Netto) gewinnt, holt den Punkt. Maximal 3:0.',
+  train: 'Punkte-System mit Risiko: Birdie = 2 Pts, Par = 1 Pt, Bogey = kein Verlust — aber zwei Bogeys hintereinander setzt deine Punkte auf 0 zurück. Eagle = 5 Pts.',
+  vierball: '2 Teams à 2 Spieler. Pro Loch zählt der bessere Netto-Score im Team. Das Team mit mehr gewonnenen Löchern gewinnt.'
 };
 var currentView = 'home';
 var currentHole = 1;
@@ -1111,6 +1121,7 @@ function setRoundMode(mode) {
   document.getElementById('guest-mode-section').style.display = isGuest ? 'block' : 'none';
   if(isGuest) setGuestPlayerCount(guestPlayerCount);
   updateCourseHcps();
+  if(!isGuest) { var d = document.getElementById('guest-mode-desc'); if(d) d.textContent = ''; }
 }
 
 function setGuestPlayerCount(n) {
@@ -1140,6 +1151,7 @@ function setGuestPlayerCount(n) {
     }
   });
   updateCourseHcps();
+  updateModeDesc();
 }
 
 // ── GUEST GAME CALCULATIONS ─────────────────────────────────────────────
@@ -1459,6 +1471,13 @@ function cancelGuestRound() {
   DATA.activeGuestRound = null;
   saveData();
   renderRoundView();
+}
+
+function updateModeDesc() {
+  var sel = document.getElementById('guest-mode-select');
+  var desc = document.getElementById('guest-mode-desc');
+  if(!sel || !desc) return;
+  desc.textContent = GAME_MODE_DESC[sel.value] || '';
 }
 
 function updateCourseHcps() {
