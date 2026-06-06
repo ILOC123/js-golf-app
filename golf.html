@@ -323,6 +323,23 @@ html,body{height:100%;background:var(--dark);color:var(--white);font-family:var(
 .hcp-card.s{border-color:rgba(175,122,197,0.4);background:rgba(175,122,197,0.04);}
 .hcp-input{background:var(--dark2);border:1.5px solid rgba(255,255,255,0.1);}
 .hcp-input:focus{outline:none;border-color:var(--j);}
+
+/* GUEST SCORECARD */
+.gsc-table{width:100%;border-collapse:collapse;min-width:280px;}
+.gsc-table th{font-size:9px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;color:var(--gold);padding:6px 2px;border-bottom:2px solid rgba(201,150,10,0.5);text-align:center;}
+.gsc-table td{text-align:center;padding:3px 2px;border-bottom:1px solid rgba(255,255,255,0.04);}
+.gsc-table tr:nth-child(even) td{background:rgba(255,255,255,0.015);}
+.gsc-table tr.nine-sep td{border-bottom:2px solid rgba(201,150,10,0.4);}
+.gsc-cell-hole{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--gold-l);width:26px;}
+.gsc-cell-par{font-family:var(--mono);font-size:12px;color:var(--grey-l);width:24px;}
+.gsc-input{width:40px;background:var(--dark3);border:1px solid rgba(255,255,255,0.1);border-radius:5px;color:var(--white);font-size:15px;font-weight:700;text-align:center;padding:5px 0;font-family:var(--mono);-moz-appearance:textfield;-webkit-appearance:none;appearance:none;}
+.gsc-input::-webkit-inner-spin-button,.gsc-input::-webkit-outer-spin-button{-webkit-appearance:none;}
+.gsc-input:focus{outline:none;border-color:var(--gold);background:rgba(201,150,10,0.08);}
+.gsc-table tr.total-row td{font-weight:800;font-size:13px;border-top:2px solid rgba(201,150,10,0.5);color:var(--gold-l);padding-top:7px;padding-bottom:7px;border-bottom:none;}
+.gsc-res-item{display:flex;align-items:center;padding:10px 14px;border-radius:var(--r-sm);border:1.5px solid rgba(255,255,255,0.08);background:var(--dark3);margin-bottom:8px;}
+.gsc-res-rank{font-size:18px;font-weight:900;font-family:var(--display);min-width:28px;}
+.gsc-res-name{font-size:15px;font-weight:700;flex:1;}
+.gsc-res-val{font-size:16px;font-weight:800;font-family:var(--mono);}
 </style>
 </head>
 <body>
@@ -400,6 +417,24 @@ html,body{height:100%;background:var(--dark);color:var(--white);font-family:var(
             </div>
           </div>
         </div>
+        <div class="form-group" id="guest-count-section" style="display:none">
+          <label class="form-label">Anzahl Spieler</label>
+          <div style="display:flex;gap:8px;">
+            <button id="gcnt-2" onclick="setGuestPlayerCount(2)" style="flex:1;padding:10px;border-radius:var(--r-sm);border:1.5px solid rgba(201,150,10,0.7);background:rgba(201,150,10,0.15);color:var(--gold-l);font-weight:700;font-size:14px;cursor:pointer;font-family:var(--font)">2</button>
+            <button id="gcnt-3" onclick="setGuestPlayerCount(3)" style="flex:1;padding:10px;border-radius:var(--r-sm);border:1.5px solid rgba(255,255,255,0.1);background:transparent;color:var(--grey-l);font-weight:700;font-size:14px;cursor:pointer;font-family:var(--font)">3</button>
+            <button id="gcnt-4" onclick="setGuestPlayerCount(4)" style="flex:1;padding:10px;border-radius:var(--r-sm);border:1.5px solid rgba(255,255,255,0.1);background:transparent;color:var(--grey-l);font-weight:700;font-size:14px;cursor:pointer;font-family:var(--font)">4</button>
+          </div>
+        </div>
+        <div class="form-group" id="guest-mode-section" style="display:none">
+          <label class="form-label">Spielform</label>
+          <select class="form-input form-select" id="guest-mode-select" onchange="updateCourseHcps()">
+            <option value="matchplay">Matchplay</option>
+            <option value="stableford">Stableford</option>
+            <option value="stroke">Zählwettspiel</option>
+            <option value="skins">Skins</option>
+            <option value="nassau">Nassau</option>
+          </select>
+        </div>
         <div class="form-group" id="guest-hcp-section" style="display:none">
           <label class="form-label">Spieler &amp; Handicap</label>
           <div class="hcp-row">
@@ -412,6 +447,18 @@ html,body{height:100%;background:var(--dark);color:var(--white);font-family:var(
               <input type="text" id="guest-p2-name" placeholder="Spieler 2" maxlength="20" style="background:none;border:none;color:var(--s);font-size:13px;font-weight:700;text-align:center;width:100%;outline:none;font-family:var(--font);margin-bottom:8px;">
               <input type="number" class="hcp-input" id="guest-p2-hcp" min="0" max="54" step="0.1" placeholder="HCP" oninput="updateCourseHcps()" style="font-size:20px;">
               <div class="hcp-calc" id="guest-p2-chcp"></div>
+            </div>
+          </div>
+          <div class="hcp-row" id="guest-row-34" style="display:none;margin-top:8px">
+            <div class="hcp-card" style="border-color:rgba(52,152,219,0.45);background:rgba(52,152,219,0.04);">
+              <input type="text" id="guest-p3-name" placeholder="Spieler 3" maxlength="20" style="background:none;border:none;color:#3498DB;font-size:13px;font-weight:700;text-align:center;width:100%;outline:none;font-family:var(--font);margin-bottom:8px;">
+              <input type="number" class="hcp-input" id="guest-p3-hcp" min="0" max="54" step="0.1" placeholder="HCP" oninput="updateCourseHcps()" style="font-size:20px;">
+              <div class="hcp-calc" id="guest-p3-chcp"></div>
+            </div>
+            <div class="hcp-card" id="guest-p4-card" style="border-color:rgba(230,126,34,0.45);background:rgba(230,126,34,0.04);display:none;">
+              <input type="text" id="guest-p4-name" placeholder="Spieler 4" maxlength="20" style="background:none;border:none;color:#E67E22;font-size:13px;font-weight:700;text-align:center;width:100%;outline:none;font-family:var(--font);margin-bottom:8px;">
+              <input type="number" class="hcp-input" id="guest-p4-hcp" min="0" max="54" step="0.1" placeholder="HCP" oninput="updateCourseHcps()" style="font-size:20px;">
+              <div class="hcp-calc" id="guest-p4-chcp"></div>
             </div>
           </div>
         </div>
@@ -543,6 +590,36 @@ html,body{height:100%;background:var(--dark);color:var(--white);font-family:var(
         <button class="btn-secondary" style="margin-top:10px" onclick="showView('home')">Zurück zur Startseite</button>
       </div>
     </div>
+  <!-- ── GUEST SCORECARD (nachträgliche Kompakt-Eingabe) ── -->
+  <div id="guest-scorecard" style="display:none;">
+    <div style="padding:13px 16px 10px;border-bottom:1px solid rgba(255,255,255,0.06);">
+      <div id="gsc-title" style="font-size:17px;font-weight:800;"></div>
+      <div id="gsc-subtitle" style="font-size:12px;color:var(--grey-l);margin-top:2px;"></div>
+    </div>
+    <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding:10px 10px 0;">
+      <table id="gsc-table" class="gsc-table"></table>
+    </div>
+    <div id="gsc-totals" style="padding:6px 12px 4px;"></div>
+    <div style="padding:8px 14px 20px;display:flex;flex-direction:column;gap:8px;">
+      <button class="btn-primary" onclick="submitGuestRound()">Auswerten ✓</button>
+      <button class="btn-danger btn-sm" onclick="cancelGuestRound()">Abbrechen</button>
+    </div>
+  </div>
+
+  <!-- ── GUEST RESULT ── -->
+  <div id="guest-result" style="display:none;">
+    <div class="result-header">
+      <div class="result-trophy" id="guest-res-trophy">🏆</div>
+      <div class="result-winner" id="guest-res-winner"></div>
+      <div class="result-detail" id="guest-res-detail"></div>
+    </div>
+    <div id="guest-res-body" style="padding:12px 16px 16px;"></div>
+    <div style="padding:0 16px 16px">
+      <button class="btn-primary" onclick="showView('history')">Zum Verlauf →</button>
+      <button class="btn-secondary" style="margin-top:10px" onclick="showView('home')">Zurück zur Startseite</button>
+    </div>
+  </div>
+
   </div>
 
   <!-- ── HISTORY ── -->
@@ -691,7 +768,7 @@ html,body{height:100%;background:var(--dark);color:var(--white);font-family:var(
 
 <script>
 // ── CONSTANTS ──────────────────────────────────────────────────────────
-var VERSION = '2026.06.06b';
+var VERSION = '2026.06.06c';
 var COURSES = {
   davos: {
     name: 'Golfclub Davos',
@@ -746,9 +823,23 @@ var DATA = {
   customCourses: {},
   activeRound: null,
   rounds: [],
-  guestRounds: []
+  guestRounds: [],
+  activeGuestRound: null
 };
 var roundMode = 'js';
+var guestPlayerCount = 2;
+var PCOLORS = {p1:'var(--j)',p2:'var(--s)',p3:'#3498DB',p4:'#E67E22'};
+var PBORDERS = {p1:'rgba(46,204,113,0.45)',p2:'rgba(175,122,197,0.45)',p3:'rgba(52,152,219,0.45)',p4:'rgba(230,126,34,0.45)'};
+var PBGS = {p1:'rgba(46,204,113,0.06)',p2:'rgba(175,122,197,0.06)',p3:'rgba(52,152,219,0.06)',p4:'rgba(230,126,34,0.06)'};
+var GAME_MODES = {
+  matchplay:{label:'Matchplay',min:2,max:2},
+  stableford:{label:'Stableford',min:2,max:4},
+  stroke:{label:'Zählwettspiel',min:2,max:4},
+  skins:{label:'Skins',min:2,max:4},
+  nassau:{label:'Nassau',min:2,max:2},
+  train:{label:'Train',min:3,max:4},
+  vierball:{label:'Vierball-Bestball',min:4,max:4}
+};
 var currentView = 'home';
 var currentHole = 1;
 
@@ -768,6 +859,7 @@ function loadData() {
     if(d.rounds) DATA.rounds = d.rounds;
     if(d.guestRounds) DATA.guestRounds = d.guestRounds;
     DATA.activeRound = d.activeRound || null;
+    DATA.activeGuestRound = d.activeGuestRound || null;
   } catch(e){}
 }
 
@@ -891,7 +983,18 @@ function renderHome() {
   // Active round banner
   var banner = document.getElementById('home-active-banner');
   var newBtn = document.getElementById('home-newround-btn');
-  if(DATA.activeRound) {
+  if(DATA.activeGuestRound) {
+    var gr = DATA.activeGuestRound;
+    var gc = getCourse(gr.courseKey);
+    var modeName = (GAME_MODES[gr.gameMode] || {label:gr.gameMode}).label;
+    var entered = gr.holes.filter(function(h){ var ok=true; for(var i=1;i<=gr.playerCount;i++){if(!h['p'+i].strokes)ok=false;} return ok; }).length;
+    banner.innerHTML = '<div class="active-round-banner" onclick="showView(\'round\')">'
+      + '<div class="arb-label"><span class="live-dot"></span> Gast-Runde in Bearbeitung</div>'
+      + '<div class="arb-info">' + (gc ? gc.name : gr.courseKey) + ' · ' + modeName + ' · ' + gr.playerCount + ' Spieler</div>'
+      + '<div class="arb-status">' + entered + ' von 18 Löchern eingetragen · Tippen um fortzufahren</div>'
+      + '</div>';
+    newBtn.style.display = 'none';
+  } else if(DATA.activeRound) {
     var ar = DATA.activeRound;
     var c = getCourse(ar.courseKey);
     var m = calcMatch(ar);
@@ -937,15 +1040,28 @@ function renderHome() {
 
 // ── ROUND VIEW ─────────────────────────────────────────────────────────
 function renderRoundView() {
-  if(DATA.activeRound) {
+  var gs = document.getElementById('guest-scorecard');
+  var gr = document.getElementById('guest-result');
+  if(DATA.activeGuestRound) {
+    document.getElementById('round-setup').style.display = 'none';
+    document.getElementById('round-scoring').style.display = 'none';
+    document.getElementById('round-result').style.display = 'none';
+    gs.style.display = 'block';
+    gr.style.display = 'none';
+    renderGuestScorecard();
+  } else if(DATA.activeRound) {
     document.getElementById('round-setup').style.display = 'none';
     document.getElementById('round-scoring').style.display = 'block';
     document.getElementById('round-result').style.display = 'none';
+    gs.style.display = 'none';
+    gr.style.display = 'none';
     renderScoring();
   } else {
     document.getElementById('round-setup').style.display = 'block';
     document.getElementById('round-scoring').style.display = 'none';
     document.getElementById('round-result').style.display = 'none';
+    gs.style.display = 'none';
+    gr.style.display = 'none';
     renderSetup();
   }
 }
@@ -991,7 +1107,358 @@ function setRoundMode(mode) {
   document.getElementById('mode-btn-guest').style.color = isGuest ? 'var(--gold-l)' : 'var(--grey-l)';
   document.getElementById('js-hcp-section').style.display = isGuest ? 'none' : 'block';
   document.getElementById('guest-hcp-section').style.display = isGuest ? 'block' : 'none';
+  document.getElementById('guest-count-section').style.display = isGuest ? 'block' : 'none';
+  document.getElementById('guest-mode-section').style.display = isGuest ? 'block' : 'none';
+  if(isGuest) setGuestPlayerCount(guestPlayerCount);
   updateCourseHcps();
+}
+
+function setGuestPlayerCount(n) {
+  guestPlayerCount = n;
+  [2,3,4].forEach(function(i){
+    var btn = document.getElementById('gcnt-'+i);
+    if(!btn) return;
+    btn.style.background = (i===n) ? 'rgba(201,150,10,0.2)' : 'transparent';
+    btn.style.borderColor = (i===n) ? 'rgba(201,150,10,0.7)' : 'rgba(255,255,255,0.1)';
+    btn.style.color = (i===n) ? 'var(--gold-l)' : 'var(--grey-l)';
+  });
+  document.getElementById('guest-row-34').style.display = (n >= 3) ? 'flex' : 'none';
+  var p4card = document.getElementById('guest-p4-card');
+  if(p4card) p4card.style.display = (n === 4) ? 'block' : 'none';
+  // Update game mode options
+  var sel = document.getElementById('guest-mode-select');
+  if(!sel) return;
+  var curMode = sel.value;
+  sel.innerHTML = '';
+  Object.keys(GAME_MODES).forEach(function(k){
+    var gm = GAME_MODES[k];
+    if(n >= gm.min && n <= gm.max) {
+      var o = document.createElement('option');
+      o.value = k; o.textContent = gm.label;
+      if(k === curMode) o.selected = true;
+      sel.appendChild(o);
+    }
+  });
+  updateCourseHcps();
+}
+
+// ── GUEST GAME CALCULATIONS ─────────────────────────────────────────────
+function getGuestPlayers(round) {
+  var pc = round.playerCount || 2;
+  var players = [];
+  for(var i = 1; i <= pc; i++) players.push('p'+i);
+  return players;
+}
+
+function calcTrainResults(round) {
+  var c = getCourse(round.courseKey);
+  if(!c) return [];
+  var players = getGuestPlayers(round);
+  var state = {};
+  players.forEach(function(p){ state[p] = {pts:0, lastBogey:false}; });
+  round.holes.forEach(function(h){
+    var hd = c.holes[h.num-1];
+    players.forEach(function(p){
+      var strokes = h[p] ? h[p].strokes : 0;
+      if(!strokes) return;
+      var sa = holeStrokeAlloc(round[p].courseHcp||0, hd.si);
+      var diff = (strokes-sa) - hd.par;
+      if(diff >= 2) { state[p].pts=0; state[p].lastBogey=false; }
+      else if(diff === 1) { if(state[p].lastBogey){state[p].pts=0;state[p].lastBogey=false;} else state[p].lastBogey=true; }
+      else if(diff === 0) { state[p].pts+=1; state[p].lastBogey=false; }
+      else if(diff === -1){ state[p].pts+=2; state[p].lastBogey=false; }
+      else { state[p].pts+=5; state[p].lastBogey=false; }
+    });
+  });
+  return players.map(function(p){ return {key:p, name:round[p].name, pts:state[p].pts}; })
+    .sort(function(a,b){ return b.pts-a.pts; });
+}
+
+function calcStablefordResults(round) {
+  var c = getCourse(round.courseKey);
+  if(!c) return [];
+  var players = getGuestPlayers(round);
+  var totals = {};
+  players.forEach(function(p){ totals[p]=0; });
+  round.holes.forEach(function(h){
+    var hd = c.holes[h.num-1];
+    players.forEach(function(p){
+      var strokes = h[p] ? h[p].strokes : 0;
+      if(!strokes) return;
+      var sa = holeStrokeAlloc(round[p].courseHcp||0, hd.si);
+      totals[p] += Math.max(0, 2-((strokes-sa)-hd.par));
+    });
+  });
+  return players.map(function(p){ return {key:p, name:round[p].name, pts:totals[p]}; })
+    .sort(function(a,b){ return b.pts-a.pts; });
+}
+
+function calcStrokeResults(round) {
+  var c = getCourse(round.courseKey);
+  if(!c) return [];
+  var players = getGuestPlayers(round);
+  var totals = {};
+  players.forEach(function(p){ totals[p]={gross:0,net:0}; });
+  round.holes.forEach(function(h){
+    var hd = c.holes[h.num-1];
+    players.forEach(function(p){
+      var strokes = h[p] ? h[p].strokes : 0;
+      if(!strokes) return;
+      var sa = holeStrokeAlloc(round[p].courseHcp||0, hd.si);
+      totals[p].gross += strokes;
+      totals[p].net += (strokes-sa);
+    });
+  });
+  return players.map(function(p){ return {key:p, name:round[p].name, gross:totals[p].gross, net:totals[p].net}; })
+    .sort(function(a,b){ return a.net-b.net; });
+}
+
+function calcSkinsResults(round) {
+  var c = getCourse(round.courseKey);
+  if(!c) return {results:[], pot:0};
+  var players = getGuestPlayers(round);
+  var skins = {}; players.forEach(function(p){ skins[p]=0; });
+  var pot = 0;
+  round.holes.forEach(function(h){
+    var hd = c.holes[h.num-1];
+    pot++;
+    var nets = {};
+    var allScored = true;
+    players.forEach(function(p){
+      var strokes = h[p] ? h[p].strokes : 0;
+      if(!strokes){ allScored=false; return; }
+      nets[p] = strokes - holeStrokeAlloc(round[p].courseHcp||0, hd.si);
+    });
+    if(!allScored) return;
+    var minNet = Math.min.apply(null, players.map(function(p){ return nets[p]; }));
+    var winners = players.filter(function(p){ return nets[p]===minNet; });
+    if(winners.length===1){ skins[winners[0]]+=pot; pot=0; }
+  });
+  var results = players.map(function(p){ return {key:p, name:round[p].name, skins:skins[p]}; })
+    .sort(function(a,b){ return b.skins-a.skins; });
+  return {results:results, pot:pot};
+}
+
+function calcNassauResults(round) {
+  var c = getCourse(round.courseKey);
+  if(!c) return null;
+  var front={p1:0,p2:0}, back={p1:0,p2:0};
+  round.holes.forEach(function(h){
+    if(!h.p1.strokes||!h.p2.strokes) return;
+    var hd = c.holes[h.num-1];
+    var ph1=calcPlayingHcp(round.p1.courseHcp||0), ph2=calcPlayingHcp(round.p2.courseHcp||0);
+    var sv=getHoleStrokes(ph1,ph2,hd.si);
+    var n1=h.p1.strokes-sv[0], n2=h.p2.strokes-sv[1];
+    var t = h.num<=9 ? front : back;
+    if(n1<n2) t.p1++; else if(n2<n1) t.p2++;
+  });
+  var total={p1:front.p1+back.p1, p2:front.p2+back.p2};
+  var fw=front.p1>front.p2?'p1':front.p2>front.p1?'p2':null;
+  var bw=back.p1>back.p2?'p1':back.p2>back.p1?'p2':null;
+  var tw=total.p1>total.p2?'p1':total.p2>total.p1?'p2':null;
+  var pts1=(fw==='p1'?1:0)+(bw==='p1'?1:0)+(tw==='p1'?1:0);
+  var pts2=(fw==='p2'?1:0)+(bw==='p2'?1:0)+(tw==='p2'?1:0);
+  return {front:front,back:back,total:total,pts1:pts1,pts2:pts2,fw:fw,bw:bw,tw:tw};
+}
+
+function calcVierbailResults(round) {
+  var c = getCourse(round.courseKey);
+  if(!c) return {t1:0,t2:0};
+  var team1=round.team1||['p1','p2'], team2=round.team2||['p3','p4'];
+  var t1=0,t2=0;
+  round.holes.forEach(function(h){
+    var hd=c.holes[h.num-1];
+    var b1=null,b2=null;
+    team1.forEach(function(p){ var s=h[p]?h[p].strokes:0; if(!s)return; var n=s-holeStrokeAlloc(round[p].courseHcp||0,hd.si); if(b1===null||n<b1)b1=n; });
+    team2.forEach(function(p){ var s=h[p]?h[p].strokes:0; if(!s)return; var n=s-holeStrokeAlloc(round[p].courseHcp||0,hd.si); if(b2===null||n<b2)b2=n; });
+    if(b1!==null&&b2!==null){ if(b1<b2)t1++; else if(b2<b1)t2++; }
+  });
+  return {t1:t1,t2:t2,team1:team1,team2:team2};
+}
+
+function getGuestStandings(round) {
+  var mode = round.gameMode;
+  if(mode==='stableford') return calcStablefordResults(round).map(function(r){return r.name+': '+r.pts+' Pts';});
+  if(mode==='stroke') return calcStrokeResults(round).map(function(r){return r.name+': '+r.net+' Netto';});
+  if(mode==='train') return calcTrainResults(round).map(function(r){return r.name+': '+r.pts+' Pts';});
+  if(mode==='skins') return calcSkinsResults(round).results.map(function(r){return r.name+': '+r.skins+' Skins';});
+  if(mode==='nassau') { var n=calcNassauResults(round); if(!n)return[]; return [round.p1.name+': '+n.pts1+' Pts', round.p2.name+': '+n.pts2+' Pts']; }
+  if(mode==='vierball') { var v=calcVierbailResults(round); var n1=(round.team1||['p1','p2']).map(function(p){return round[p].name;}).join('/'); var n2=(round.team2||['p3','p4']).map(function(p){return round[p].name;}).join('/'); return [n1+': '+v.t1+' Loch', n2+': '+v.t2+' Loch']; }
+  if(mode==='matchplay') { var m=calcMatch(round); return [round.p1.name+': '+m.p1, round.p2.name+': '+m.p2]; }
+  return [];
+}
+
+// ── GUEST SCORECARD RENDERING ───────────────────────────────────────────
+function renderGuestScorecard() {
+  var r = DATA.activeGuestRound;
+  if(!r) return;
+  var c = getCourse(r.courseKey);
+  var pc = r.playerCount;
+  var modeName = (GAME_MODES[r.gameMode] || {label:r.gameMode}).label;
+  document.getElementById('gsc-title').textContent = (c ? c.name : r.courseKey) + ' · ' + r.tee;
+  document.getElementById('gsc-subtitle').textContent = modeName + ' · ' + pc + ' Spieler · ' + r.date;
+
+  var pColors = ['var(--j)','var(--s)','#3498DB','#E67E22'];
+  var thead = '<thead><tr><th class="gsc-cell-hole">Loch</th><th class="gsc-cell-par">Par</th>';
+  for(var i = 1; i <= pc; i++) {
+    thead += '<th style="color:' + pColors[i-1] + '">' + r['p'+i].name.slice(0,6) + '</th>';
+  }
+  thead += '</tr></thead>';
+
+  var tbody = '<tbody>';
+  r.holes.forEach(function(hole) {
+    var hd = c ? c.holes[hole.num-1] : {par:4};
+    var isSep = (hole.num === 9);
+    tbody += '<tr' + (isSep?' class="nine-sep"':'') + '>';
+    tbody += '<td class="gsc-cell-hole">' + hole.num + '</td>';
+    tbody += '<td class="gsc-cell-par">' + hd.par + '</td>';
+    for(var i = 1; i <= pc; i++) {
+      var val = hole['p'+i].strokes || '';
+      tbody += '<td><input class="gsc-input" type="number" min="1" max="12" inputmode="numeric" '
+        + 'id="gsc-'+hole.num+'-p'+i+'" value="' + val + '" '
+        + 'style="border-color:' + (val ? 'rgba(201,150,10,0.4)' : 'rgba(255,255,255,0.1)') + '" '
+        + 'oninput="gscUpdate(this,' + hole.num + ',' + i + ')"></td>';
+    }
+    tbody += '</tr>';
+  });
+  tbody += '<tr class="total-row"><td colspan="2" style="text-align:left;padding-left:4px">Total</td>';
+  for(var i = 1; i <= pc; i++) {
+    var tot = r.holes.reduce(function(s,h){ return s + (h['p'+i].strokes||0); }, 0);
+    tbody += '<td id="gsc-tot-p'+i+'" style="color:' + pColors[i-1] + '">' + (tot||'−') + '</td>';
+  }
+  tbody += '</tr></tbody>';
+
+  document.getElementById('gsc-table').innerHTML = thead + tbody;
+}
+
+function gscUpdate(el, holeNum, pIdx) {
+  var r = DATA.activeGuestRound;
+  if(!r) return;
+  var val = parseInt(el.value) || 0;
+  r.holes[holeNum-1]['p'+pIdx].strokes = val;
+  el.style.borderColor = val ? 'rgba(201,150,10,0.4)' : 'rgba(255,255,255,0.1)';
+  var pColors = ['var(--j)','var(--s)','#3498DB','#E67E22'];
+  var tot = r.holes.reduce(function(s,h){ return s + (h['p'+pIdx].strokes||0); }, 0);
+  var totEl = document.getElementById('gsc-tot-p'+pIdx);
+  if(totEl) { totEl.textContent = tot || '−'; }
+  saveData();
+}
+
+function submitGuestRound() {
+  var r = DATA.activeGuestRound;
+  if(!r) return;
+  // Read any remaining input values from DOM (in case oninput missed some)
+  var pc = r.playerCount;
+  r.holes.forEach(function(hole){
+    for(var i = 1; i <= pc; i++) {
+      var el = document.getElementById('gsc-'+hole.num+'-p'+i);
+      if(el) hole['p'+i].strokes = parseInt(el.value) || 0;
+    }
+  });
+  var played = r.holes.filter(function(h){
+    for(var i = 1; i <= pc; i++) { if(!h['p'+i].strokes) return false; }
+    return true;
+  }).length;
+  if(played < 9) {
+    if(!confirm('Es wurden nur ' + played + ' Löcher eingetragen. Trotzdem auswerten?')) return;
+  }
+  r.status = 'complete';
+  DATA.guestRounds.unshift(r);
+  DATA.activeGuestRound = null;
+  saveData();
+  showGuestResult(r);
+}
+
+function showGuestResult(r) {
+  document.getElementById('round-setup').style.display = 'none';
+  document.getElementById('round-scoring').style.display = 'none';
+  document.getElementById('round-result').style.display = 'none';
+  document.getElementById('guest-scorecard').style.display = 'none';
+  document.getElementById('guest-result').style.display = 'block';
+
+  var mode = r.gameMode;
+  var pc = r.playerCount;
+  var modeName = (GAME_MODES[mode] || {label:mode}).label;
+  var pColors = ['var(--j)','var(--s)','#3498DB','#E67E22'];
+
+  var trophy = '🏆', winnerText = '', detailText = modeName;
+
+  if(mode === 'stableford') {
+    var res = calcStablefordResults(r);
+    trophy = res[0].pts > 0 ? '🏆' : '⛳';
+    winnerText = res[0].name + ' gewinnt!';
+    detailText = 'Stableford · ' + res[0].pts + ' Punkte';
+  } else if(mode === 'stroke') {
+    var res = calcStrokeResults(r);
+    winnerText = res[0].name + ' gewinnt!';
+    detailText = 'Netto ' + res[0].net + ' · Brutto ' + res[0].gross;
+  } else if(mode === 'skins') {
+    var sr = calcSkinsResults(r);
+    var res = sr.results;
+    winnerText = res[0].skins > 0 ? res[0].name + ' führt!' : 'Kein Sieger';
+    detailText = 'Skins' + (sr.pot > 0 ? ' · ' + sr.pot + ' Loch(e) offen' : '');
+  } else if(mode === 'nassau') {
+    var nres = calcNassauResults(r);
+    if(nres) {
+      var w = nres.pts1 > nres.pts2 ? r.p1.name : nres.pts2 > nres.pts1 ? r.p2.name : null;
+      winnerText = w ? w + ' gewinnt!' : 'Unentschieden';
+      detailText = 'Nassau · ' + nres.pts1 + ':' + nres.pts2;
+    }
+  } else if(mode === 'train') {
+    var res = calcTrainResults(r);
+    winnerText = res[0].name + ' gewinnt!';
+    detailText = 'Train · ' + res[0].pts + ' Punkte';
+  } else if(mode === 'vierball') {
+    var vres = calcVierbailResults(r);
+    var n1 = (r.team1||['p1','p2']).map(function(p){return r[p].name;}).join('/');
+    var n2 = (r.team2||['p3','p4']).map(function(p){return r[p].name;}).join('/');
+    winnerText = vres.t1 > vres.t2 ? n1 + ' gewinnt!' : vres.t2 > vres.t1 ? n2 + ' gewinnt!' : 'Unentschieden';
+    detailText = 'Vierball-Bestball · ' + vres.t1 + ':' + vres.t2;
+  } else if(mode === 'matchplay') {
+    var m = calcMatch(r);
+    var w = m.lead > 0 ? r.p1.name : m.lead < 0 ? r.p2.name : null;
+    winnerText = w ? w + ' gewinnt!' : 'Unentschieden';
+    detailText = 'Matchplay · ' + matchStatusText(m);
+    trophy = w ? '🏆' : '🤝';
+  }
+
+  document.getElementById('guest-res-trophy').textContent = trophy;
+  document.getElementById('guest-res-winner').textContent = winnerText || modeName;
+  document.getElementById('guest-res-detail').textContent = detailText;
+
+  // Rankings body
+  var body = '<div style="margin-bottom:12px">';
+  var standings = getGuestStandings(r);
+  standings.forEach(function(line, idx){
+    var medals = ['🥇','🥈','🥉','4️⃣'];
+    body += '<div class="gsc-res-item">'
+      + '<span class="gsc-res-rank">' + (medals[idx]||idx+1) + '</span>'
+      + '<span class="gsc-res-name" style="color:' + pColors[idx] + '">' + line + '</span>'
+      + '</div>';
+  });
+  body += '</div>';
+
+  // Brutto totals per player
+  body += '<div style="background:var(--dark3);border:2.5px solid rgba(201,150,10,0.7);border-radius:var(--r-sm);padding:10px 14px;margin-bottom:12px;">';
+  body += '<div style="font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Brutto-Schläge</div>';
+  body += '<div style="display:flex;gap:10px;flex-wrap:wrap;">';
+  for(var i = 1; i <= pc; i++) {
+    var tot = r.holes.reduce(function(s,h){ return s + (h['p'+i].strokes||0); }, 0);
+    body += '<div style="text-align:center;flex:1;min-width:60px">'
+      + '<div style="font-size:28px;font-weight:900;font-family:var(--display);color:' + pColors[i-1] + '">' + (tot||'−') + '</div>'
+      + '<div style="font-size:10px;color:var(--grey-l);margin-top:2px">' + r['p'+i].name + '</div>'
+      + '<div style="font-size:9px;color:var(--grey);margin-top:1px">HCP ' + (r['p'+i].courseHcp||'−') + '</div>'
+      + '</div>';
+  }
+  body += '</div></div>';
+  document.getElementById('guest-res-body').innerHTML = body;
+}
+
+function cancelGuestRound() {
+  if(!confirm('Runde wirklich abbrechen? Alle eingetragenen Scores gehen verloren.')) return;
+  DATA.activeGuestRound = null;
+  saveData();
+  renderRoundView();
 }
 
 function updateCourseHcps() {
@@ -1001,12 +1468,14 @@ function updateCourseHcps() {
   if(!c || !c.tees[tee]) return;
   var td = c.tees[tee];
   if(roundMode === 'guest') {
-    var h1 = parseFloat(document.getElementById('guest-p1-hcp').value) || 0;
-    var h2 = parseFloat(document.getElementById('guest-p2-hcp').value) || 0;
-    var ch1 = calcCourseHcp(h1, td.cr, td.sr, td.par);
-    var ch2 = calcCourseHcp(h2, td.cr, td.sr, td.par);
-    document.getElementById('guest-p1-chcp').innerHTML = 'Course HCP: <b>' + ch1 + '</b> / Spiel HCP: <b>' + calcPlayingHcp(ch1) + '</b>';
-    document.getElementById('guest-p2-chcp').innerHTML = 'Course HCP: <b>' + ch2 + '</b> / Spiel HCP: <b>' + calcPlayingHcp(ch2) + '</b>';
+    [1,2,3,4].forEach(function(i){
+      var hEl = document.getElementById('guest-p'+i+'-hcp');
+      var cEl = document.getElementById('guest-p'+i+'-chcp');
+      if(!hEl || !cEl) return;
+      var h = parseFloat(hEl.value) || 0;
+      var ch = calcCourseHcp(h, td.cr, td.sr, td.par);
+      cEl.innerHTML = 'Course HCP: <b>' + ch + '</b> / Spiel HCP: <b>' + calcPlayingHcp(ch) + '</b>';
+    });
   } else {
     var h1 = DATA.players.p1.hcp;
     var h2 = DATA.players.p2.hcp;
@@ -1024,22 +1493,48 @@ function startRound() {
   var ck = document.getElementById('round-course').value;
   var tee = document.getElementById('round-tee').value;
   var isGuest = roundMode === 'guest';
-  var p1name, p2name, h1, h2;
-  if(isGuest) {
-    p1name = document.getElementById('guest-p1-name').value.trim() || 'Spieler 1';
-    p2name = document.getElementById('guest-p2-name').value.trim() || 'Spieler 2';
-    h1 = parseFloat(document.getElementById('guest-p1-hcp').value) || 0;
-    h2 = parseFloat(document.getElementById('guest-p2-hcp').value) || 0;
-  } else {
-    p1name = DATA.players.p1.name;
-    p2name = DATA.players.p2.name;
-    h1 = DATA.players.p1.hcp;
-    h2 = DATA.players.p2.hcp;
-    if(isNaN(h1) || isNaN(h2)) { showToast('HCP in den Settings hinterlegen'); return; }
-  }
   var c = getCourse(ck);
   if(!c) return;
   var td = c.tees[tee];
+
+  if(isGuest) {
+    var pc = guestPlayerCount;
+    var gameMode = document.getElementById('guest-mode-select').value;
+    var round = {
+      id: 'g_' + Date.now(),
+      date: date,
+      courseKey: ck,
+      tee: tee,
+      gameMode: gameMode,
+      playerCount: pc,
+      holes: [],
+      status: 'active'
+    };
+    for(var i = 1; i <= pc; i++) {
+      var nameEl = document.getElementById('guest-p'+i+'-name');
+      var hcpEl  = document.getElementById('guest-p'+i+'-hcp');
+      var pname  = nameEl ? (nameEl.value.trim() || 'Spieler '+i) : 'Spieler '+i;
+      var hcp    = hcpEl  ? (parseFloat(hcpEl.value) || 0) : 0;
+      var ch     = calcCourseHcp(hcp, td.cr, td.sr, td.par);
+      round['p'+i] = {name:pname, hcp:hcp, courseHcp:ch, playingHcp:calcPlayingHcp(ch)};
+    }
+    for(var h = 1; h <= 18; h++) {
+      var hole = {num:h};
+      for(var j = 1; j <= pc; j++) hole['p'+j] = {strokes:0};
+      round.holes.push(hole);
+    }
+    DATA.activeGuestRound = round;
+    saveData();
+    renderRoundView();
+    return;
+  }
+
+  // J&S Matchplay
+  var p1name = DATA.players.p1.name;
+  var p2name = DATA.players.p2.name;
+  var h1 = DATA.players.p1.hcp;
+  var h2 = DATA.players.p2.hcp;
+  if(isNaN(h1) || isNaN(h2)) { showToast('HCP in den Settings hinterlegen'); return; }
   var ch1 = calcCourseHcp(h1, td.cr, td.sr, td.par);
   var ch2 = calcCourseHcp(h2, td.cr, td.sr, td.par);
   var holes = [];
@@ -1051,7 +1546,6 @@ function startRound() {
     date: date,
     courseKey: ck,
     tee: tee,
-    isGuestRound: isGuest,
     p1: {name:p1name, hcp:h1, courseHcp:ch1, playingHcp:calcPlayingHcp(ch1)},
     p2: {name:p2name, hcp:h2, courseHcp:ch2, playingHcp:calcPlayingHcp(ch2)},
     holes: holes,
@@ -1237,7 +1731,7 @@ function finishRound() {
   var m = calcMatch(ar);
   ar.status = 'complete';
   ar.matchResult = {p1:m.p1, p2:m.p2, lead:m.lead, decided:m.decided, remaining:m.remaining};
-  if(ar.isGuestRound) { DATA.guestRounds.unshift(ar); } else { DATA.rounds.unshift(ar); }
+  DATA.rounds.unshift(ar);
   DATA.activeRound = null;
   saveData();
   showResult(ar);
@@ -1315,11 +1809,19 @@ function cancelRound() {
 // ── HISTORY ────────────────────────────────────────────────────────────
 function renderHistory() {
   var el = document.getElementById('history-list');
-  if(!DATA.rounds.length && !DATA.activeRound) {
+  if(!DATA.rounds.length && !DATA.guestRounds.length && !DATA.activeRound && !DATA.activeGuestRound) {
     el.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">Noch keine Runden</div><div class="empty-sub">Starte eine neue Runde auf dem Platz</div></div>';
     return;
   }
   var html = '';
+  if(DATA.activeGuestRound) {
+    var agr = DATA.activeGuestRound;
+    var agc = getCourse(agr.courseKey);
+    var modeName = (GAME_MODES[agr.gameMode]||{label:agr.gameMode}).label;
+    html += '<div class="round-card" onclick="showView(\'round\')">'
+      + '<div class="rc-head"><div><div class="rc-date">📍 ' + agr.date + '</div><div class="rc-course">' + (agc?agc.name:agr.courseKey) + ' · Gast · ' + modeName + '</div></div>'
+      + '<span class="rc-badge active">▶ In Bearbeitung</span></div></div>';
+  }
   if(DATA.activeRound) {
     var ar = DATA.activeRound;
     var c = getCourse(ar.courseKey);
@@ -1371,21 +1873,26 @@ function renderHistory() {
   // Gast-Runden
   if(DATA.guestRounds.length) {
     html += '<div style="padding:12px 14px 4px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey-l);">Gast Runden</div>';
+    var pColors = ['var(--j)','var(--s)','#3498DB','#E67E22'];
     DATA.guestRounds.forEach(function(r){
       var c = getCourse(r.courseKey);
-      var m = calcMatch(r);
-      var winner = m.lead > 0 ? 'j' : m.lead < 0 ? 's' : 'half';
-      var badgeText = m.lead === 0 ? 'Unentschieden' : (m.lead > 0 ? r.p1.name : r.p2.name) + ' ' + matchStatusText(m);
-      var t1 = r.holes.reduce(function(s,h){ return s+(h.p1.strokes||0);},0);
-      var t2 = r.holes.reduce(function(s,h){ return s+(h.p2.strokes||0);},0);
-      html += '<div class="round-card" onclick="openRoundDetail(\'' + r.id + '\',true)">'
-        + '<div class="rc-head"><div><div class="rc-date">' + r.date + '</div><div class="rc-course">' + (c?c.name:r.courseKey) + ' · ' + r.tee + '</div></div>'
-        + '<span class="rc-badge ' + winner + '">' + badgeText + '</span></div>'
-        + '<div class="rc-body">'
-        + '<div class="rc-stat"><div class="rc-stat-val" style="color:var(--j)">' + t1 + '</div><div class="rc-stat-lbl"><span style="color:var(--j)">' + r.p1.name + '</span> Brutto</div></div>'
-        + '<div class="rc-stat"><div class="rc-stat-val" style="color:var(--s)">' + t2 + '</div><div class="rc-stat-lbl"><span style="color:var(--s)">' + r.p2.name + '</span> Brutto</div></div>'
-        + '<div class="rc-stat"><div class="rc-stat-val">' + m.p1 + '-' + m.p2 + '</div><div class="rc-stat-lbl">Löcher</div></div>'
-        + '</div></div>';
+      var pc = r.playerCount || 2;
+      var modeName = r.gameMode ? (GAME_MODES[r.gameMode]||{label:r.gameMode}).label : 'Matchplay';
+      var standings = r.gameMode ? getGuestStandings(r) : null;
+      var badgeCls = 'half';
+      var badgeText = modeName;
+      if(standings && standings.length) { badgeText = standings[0]; }
+      html += '<div class="round-card" onclick="openGuestRoundDetail(\'' + r.id + '\')">'
+        + '<div class="rc-head"><div><div class="rc-date">' + r.date + '</div>'
+        + '<div class="rc-course">' + (c?c.name:r.courseKey) + ' · ' + r.tee + ' · ' + pc + ' Spieler</div></div>'
+        + '<span class="rc-badge ' + badgeCls + '">' + modeName + '</span></div>'
+        + '<div class="rc-body">';
+      for(var i = 1; i <= pc; i++) {
+        var tot = r.holes.reduce(function(s,h){ return s+(h['p'+i].strokes||0);},0);
+        html += '<div class="rc-stat"><div class="rc-stat-val" style="color:' + pColors[i-1] + '">' + (tot||'−') + '</div>'
+          + '<div class="rc-stat-lbl"><span style="color:' + pColors[i-1] + '">' + r['p'+i].name + '</span></div></div>';
+      }
+      html += '</div></div>';
     });
   }
   el.innerHTML = html;
@@ -1477,6 +1984,62 @@ function deleteRound(id, isGuest) {
   closeSheet();
   renderHistory();
   showToast('Runde gelöscht');
+}
+
+function openGuestRoundDetail(id) {
+  var r = DATA.guestRounds.find(function(x){ return x.id === id; });
+  if(!r) return;
+  var c = getCourse(r.courseKey);
+  var pc = r.playerCount || 2;
+  var pColors = ['var(--j)','var(--s)','#3498DB','#E67E22'];
+  var modeName = r.gameMode ? (GAME_MODES[r.gameMode]||{label:r.gameMode}).label : 'Matchplay';
+
+  var html = '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">';
+  for(var i = 1; i <= pc; i++) {
+    var tot = r.holes.reduce(function(s,h){ return s+(h['p'+i].strokes||0);},0);
+    html += '<div style="flex:1;min-width:80px;background:var(--dark3);border:2px solid rgba(255,255,255,0.08);border-radius:var(--r-sm);padding:10px;text-align:center;border-color:' + pColors[i-1].replace('var(--j)','rgba(46,204,113,0.4)').replace('var(--s)','rgba(175,122,197,0.4)') + '">'
+      + '<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:' + pColors[i-1] + ';margin-bottom:4px">' + r['p'+i].name + '</div>'
+      + '<div style="font-size:30px;font-weight:900;font-family:var(--display);color:' + pColors[i-1] + '">' + (tot||'−') + '</div>'
+      + '<div style="font-size:9px;color:var(--grey-l);margin-top:2px">HCP ' + (r['p'+i].courseHcp||'−') + '</div>'
+      + '</div>';
+  }
+  html += '</div>';
+
+  // Standings
+  var standings = r.gameMode ? getGuestStandings(r) : [];
+  if(standings.length) {
+    var medals = ['🥇','🥈','🥉','4️⃣'];
+    html += '<div style="background:var(--dark3);border:2.5px solid rgba(201,150,10,0.7);border-radius:var(--r-sm);padding:10px 14px;margin-bottom:12px;">';
+    html += '<div style="font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px">' + modeName + ' · Ergebnis</div>';
+    standings.forEach(function(line, idx){
+      html += '<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:14px;font-weight:600;">' + (medals[idx]||idx+1) + ' ' + line + '</div>';
+    });
+    html += '</div>';
+  }
+
+  // Compact hole table
+  html += '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">';
+  html += '<table class="gsc-table"><thead><tr><th class="gsc-cell-hole">Loch</th><th class="gsc-cell-par">Par</th>';
+  for(var i = 1; i <= pc; i++) html += '<th style="color:' + pColors[i-1] + '">' + r['p'+i].name.slice(0,6) + '</th>';
+  html += '</tr></thead><tbody>';
+  r.holes.forEach(function(hole){
+    var hd = c ? c.holes[hole.num-1] : {par:4};
+    html += '<tr' + (hole.num===9?' class="nine-sep"':'') + '>';
+    html += '<td class="gsc-cell-hole">' + hole.num + '</td><td class="gsc-cell-par">' + hd.par + '</td>';
+    for(var i = 1; i <= pc; i++) {
+      var s = hole['p'+i] ? hole['p'+i].strokes : 0;
+      html += '<td style="color:' + (s ? pColors[i-1] : 'rgba(255,255,255,0.2)') + ';font-family:var(--mono);font-size:14px;font-weight:700;">' + (s||'−') + '</td>';
+    }
+    html += '</tr>';
+  });
+  html += '<tr class="total-row"><td colspan="2" style="text-align:left;padding-left:4px">Total</td>';
+  for(var i = 1; i <= pc; i++) {
+    var tot = r.holes.reduce(function(s,h){ return s+(h['p'+i].strokes||0);},0);
+    html += '<td style="color:' + pColors[i-1] + '">' + (tot||'−') + '</td>';
+  }
+  html += '</tr></tbody></table></div>';
+  html += '<div style="margin-top:14px"><button class="btn-danger" onclick="deleteRound(\'' + r.id + '\',true)">Runde löschen</button></div>';
+  openSheet(r.date + ' · ' + (c?c.name:r.courseKey) + ' · ' + modeName, html);
 }
 
 // ── STATS ──────────────────────────────────────────────────────────────
