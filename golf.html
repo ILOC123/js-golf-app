@@ -942,8 +942,6 @@ function renderSetup() {
   // Player names
   document.getElementById('setup-p1-name').textContent = DATA.players.p1.name;
   document.getElementById('setup-p2-name').textContent = DATA.players.p2.name;
-  document.getElementById('setup-p1-hcp').value = DATA.players.p1.hcp;
-  document.getElementById('setup-p2-hcp').value = DATA.players.p2.hcp;
   onCourseChange();
 }
 
@@ -974,8 +972,8 @@ function updateCourseHcps() {
   document.getElementById('setup-p2-hcp-display').textContent = h2;
   var ch1 = calcCourseHcp(h1, td.cr, td.sr, td.par);
   var ch2 = calcCourseHcp(h2, td.cr, td.sr, td.par);
-  document.getElementById('setup-p1-chcp').textContent = 'Course HCP: ' + ch1 + '  →  Spiel HCP: ' + calcPlayingHcp(ch1);
-  document.getElementById('setup-p2-chcp').textContent = 'Course HCP: ' + ch2 + '  →  Spiel HCP: ' + calcPlayingHcp(ch2);
+  document.getElementById('setup-p1-chcp').innerHTML = 'Course HCP: <b>' + ch1 + '</b> &nbsp;·&nbsp; Spiel HCP: <b>' + calcPlayingHcp(ch1) + '</b>';
+  document.getElementById('setup-p2-chcp').innerHTML = 'Course HCP: <b>' + ch2 + '</b> &nbsp;·&nbsp; Spiel HCP: <b>' + calcPlayingHcp(ch2) + '</b>';
 }
 
 function startRound() {
